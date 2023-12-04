@@ -28,6 +28,7 @@ const sendRequestWithoutAuth = async (method, endpoint, data = {}) => {
         console.log("pute1");
         if (response) {
             console.log("pute2");
+            console.log(response.data);
             return response.data;
             console.log("pute3");
         }
