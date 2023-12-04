@@ -1,24 +1,17 @@
-# Use an official Node.js runtime as a base image
-FROM node:14-alpine
-
-# Set the working directory in the container
-WORKDIR /usr/src/app
-
-# Copy package.json and package-lock.json to the working directory
+# Étape 1: Construire l'application
+FROM node:14 AS build
+WORKDIR /app
 COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy the local code to the container
 COPY . .
-
-# Build the React app
+RUN npm install
 RUN npm run build
 
-# Expose the port that the app will run on
-EXPOSE 3000
+# Étape 2: Serveur de production
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
+# Remove the default NGINX configuration (if any) and copy custom NGINX config
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d
 
-# Define the command to run your application
-CMD ["npm", "start"]
-
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
