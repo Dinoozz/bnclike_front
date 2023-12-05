@@ -1,0 +1,34 @@
+name: Mirror repository Epitech
+
+on: push
+
+jobs:
+  copy-repo:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Setup Git
+      run: |
+        git config --global user.name 'Dinoozz'
+        git config --global user.email 'camille.lecoq@epitech.eu'
+
+    - name: Cloner le dépôt distant
+      run: git clone https://github.com/EpitechMscProPromo2025/T-WEB-700-LIL_9.git temp_repo
+
+    - name: Préparer le dossier /web
+      run: |
+        mkdir -p temp_repo/web
+        rsync -av --exclude temp_repo/ . temp_repo/web/
+
+    - name: Commit et Push
+      run: |
+        cd temp_repo
+        git add .
+        COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s" --abbrev-commit)
+        git commit -m "${COMMIT_MESSAGE}"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ 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 }}
