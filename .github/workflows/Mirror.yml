@@ -25,6 +25,7 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         script: |
           cd bnclike_front
+          ls
           git pull origin main
           docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi countofmoney
           docker build -t countofmoney .
