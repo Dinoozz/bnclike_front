@@ -20,7 +20,9 @@ jobs:
         ssh-keyscan github.com >> ~/.ssh/known_hosts
 
     - name: Cloner le dépôt distant
-      run: git clone git@github.com:EpitechMscProPromo2025/T-WEB-700-LIL_9.git temp_repo
+      run: 
+        rm -rf temp_repo
+        git clone git@github.com:EpitechMscProPromo2025/T-WEB-700-LIL_9.git temp_repo
 
     - name: Copier le code source dans le sous-dossier /web du dépôt distant
       run: |
@@ -39,7 +41,7 @@ jobs:
         cd temp_repo
         git add web
         COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
-        cat COMMIT_MESSAGE
+        printenv
         git commit -m "Mise à jour du sous-dossier /web: ${COMMIT_MESSAGE}"
         git push origin main
 
