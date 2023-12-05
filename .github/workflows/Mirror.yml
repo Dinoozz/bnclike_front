@@ -43,11 +43,11 @@ jobs:
         COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
         git commit -m "Mise à jour du sous-dossier /web: ${COMMIT_MESSAGE}"
         git push origin main
+        cd ..
+        rm -rf temp_repo
 
 
     - name: Cleanup SSH
       if: always()
       run: |
-        cd ..
-        rm -rf temp_repo
         rm -f ~/.ssh/id_rsa
