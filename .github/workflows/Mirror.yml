@@ -40,10 +40,14 @@ jobs:
       run: |
         cd temp_repo
         git add web
-        COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
-        printenv
-        git commit -m "Mise à jour du sous-dossier /web: ${COMMIT_MESSAGE}"
-        git push origin main
+        # Vérifier s'il y a des changements à commettre
+        if git diff --quiet; then
+          echo "Aucun changement à commettre."
+        else
+          COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
+          git commit -m "Mise à jour du sous-dossier /web: ${COMMIT_MESSAGE}"
+          git push origin main
+        fi
 
     - name: Cleanup SSH
       if: always()
