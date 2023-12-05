@@ -16,7 +16,8 @@ jobs:
         git config --global user.email 'camille.lecoq@epitech.eu'
 
     - name: Cloner le dépôt distant
-      run: git clone https://github.com/EpitechMscProPromo2025/T-WEB-700-LIL_9.git temp_repo
+      run: |
+        git clone https://${ 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 }@github.com/EpitechMscProPromo2025/T-WEB-700-LIL_9.git temp_repo
 
     - name: Préparer le dossier /web
       run: |
