@@ -1,37 +1,31 @@
-name: Copier le Repository Complet
+name: Deploy to Production Server
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  copy-repo:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout Repository
+    - name: Checkout code
       uses: actions/checkout@v2
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
       with:
-        ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Setup SSH
-      run: |
-        mkdir -p ~/.ssh
-        echo ${{ secrets.SSH_PRIVATE_KEY }} > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-    - name: Cloner le dépôt distant et pousser les changements
-      run: |
-        # Cloner le dépôt distant via SSH
-        git clone git@github.com:EpitechMscProPromo2025/T-WEB-700-LIL_9.git temp_repo
-        # Copier les fichiers, sauf .github/workflows
-        rsync -av --exclude '.github/workflows/' . temp_repo/
-        # Pousser les changements
-        cd temp_repo
-        git add .
-        COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
-        git commit -m "${COMMIT_MESSAGE}"
-        git push origin main
-
-    - name: Cleanup SSH
-      if: always()
-      run: rm -f ~/.ssh/id_rsa
+    - name: Execute SSH commands
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ubuntu
+        password: ${{ secrets.SSH_PASSWORD }}
+        script: |
+          cd bnclike_front
+          git pull origin main
+          docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi countofmoney
+          docker build -t countofmoney .
+          docker run -d -p 8080:80 --name web-client countofmoney
