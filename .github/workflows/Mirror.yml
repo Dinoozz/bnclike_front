@@ -15,7 +15,7 @@ jobs:
     - name: Setup SSH
       run: |
         mkdir -p ~/.ssh
-        echo "-----BEGIN OPENSSH PRIVATE KEY-----b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABB7Krv7xkvEoTNdFWJ2FQrfAAAAGAAAAAEAAAAzAAAAC3NzaC1lZDI1NTE5AAAAIEljYBhZKQ1a90eHq7T6f/SOq3SQX7A8Nsr+cplR5hfNAAAAoDrPeuZGaHnPnjS9egItzGEc59MtUDh6H45UANbHVUXjwyZz5OuYCeBvN095OwDIVxIMa8iHU5hIqf9n1cB/BRLbYilywgGV7L56KOCbwLxi0H6K4YnHJe0mfuQNDeFxXczTxAtzelZKpnLEabf1pfiZuw2WF2yi0ETOxSclnRmr0Pzik+MZxhyIljsO2qVK6zEuh2G4WpQ1/F/dZBvshrs=-----END OPENSSH PRIVATE KEY-----" > ~/.ssh/id_rsa
+        echo ${{ secrets.SSH_PRIVATE_KEY }} > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan github.com >> ~/.ssh/known_hosts
 
