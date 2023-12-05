@@ -29,6 +29,11 @@ jobs:
         # Copier tout sauf le dossier .git et .github/workflows dans le sous-dossier /web
         rsync -av --exclude '.git' --exclude '.github/workflows/' . temp_repo/web/
 
+    - name: Configurer l'utilisateur Git
+      run: |
+        git config --global user.email "camille.lecoq@epitech.eu"
+        git config --global user.name "Dinoozz"
+
     - name: Commit et Push les changements
       run: |
         cd temp_repo
