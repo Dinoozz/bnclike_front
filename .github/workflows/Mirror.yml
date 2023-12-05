@@ -21,7 +21,7 @@ jobs:
     - name: Préparer le dossier /web
       run: |
         mkdir -p temp_repo/web
-        rsync -av --exclude temp_repo/ . temp_repo/web/
+        rsync -av --exclude .github/workflows/ --exclude temp_repo/ . temp_repo/web/
 
     - name: Commit et Push
       run: |
@@ -31,4 +31,4 @@ jobs:
         git commit -m "${COMMIT_MESSAGE}"
         git push
       env:
-        GITHUB_TOKEN: ${{ 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 }}
+        GITHUB_TOKEN: ${ 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 }
