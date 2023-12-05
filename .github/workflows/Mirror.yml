@@ -39,7 +39,7 @@ jobs:
         cd temp_repo
         git add web
         COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
-        cat ${COMMIT_MESSAGE}
+        cat COMMIT_MESSAGE
         git commit -m "Mise à jour du sous-dossier /web: ${COMMIT_MESSAGE}"
         git push origin main
 
