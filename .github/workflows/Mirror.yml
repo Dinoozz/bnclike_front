@@ -47,7 +47,7 @@ jobs:
 
     - name: Cleanup SSH
       if: always()
-      run: 
+      run: |
         cd ..
         rm -rf temp_repo
         rm -f ~/.ssh/id_rsa
