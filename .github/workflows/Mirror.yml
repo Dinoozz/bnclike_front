@@ -1,32 +1,42 @@
-name: Deploy to Production Server
+name: Copier le Repository Complet dans le sous-dossier /web
 
-on:
-  push:
-    branches:
-      - main
+on: push
 
 jobs:
-  deploy:
+  copy-repo:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout code
+    - name: Checkout Repository
       uses: actions/checkout@v2
-
-    - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.5.3
       with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Execute SSH commands
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ubuntu
-        password: ${{ secrets.SSH_PASSWORD }}
-        script: |
-          cd bnclike_front
-          ls
-          git pull origin main
-          docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi countofmoney
-          docker build -t countofmoney .
-          docker run -d -p 8080:80 --name web-client countofmoney
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+    - name: Cloner le dépôt distant
+      run: git clone git@github.com:EpitechMscProPromo2025/T-WEB-700-LIL_9.git temp_repo
+
+    - name: Copier le code source dans le sous-dossier /web du dépôt distant
+      run: |
+        # Créer un sous-dossier /web s'il n'existe pas
+        mkdir -p temp_repo/web
+        # Copier tout sauf le dossier .git et .github/workflows dans le sous-dossier /web
+        rsync -av --exclude '.git' --exclude '.github/workflows/' . temp_repo/web/
+
+    - name: Commit et Push les changements
+      run: |
+        cd temp_repo
+        git add web
+        COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
+        git commit -m "Mise à jour du sous-dossier /web: ${COMMIT_MESSAGE}"
+        git push origin main
+
+    - name: Cleanup SSH
+      if: always()
+      run: rm -f ~/.ssh/id_rsa
