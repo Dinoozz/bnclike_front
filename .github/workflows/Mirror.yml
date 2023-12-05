@@ -37,10 +37,9 @@ jobs:
 
     - name: Commit et Push les changements
       run: |
+        COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
         cd temp_repo
         git add web
-        COMMIT_MESSAGE=""
-        COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
         printenv
         git commit -m "Mise à jour du sous-dossier /web: ${COMMIT_MESSAGE}"
         git push origin main
