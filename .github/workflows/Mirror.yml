@@ -39,6 +39,7 @@ jobs:
       run: |
         cd temp_repo
         git add web
+        COMMIT_MESSAGE=""
         COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
         printenv
         git commit -m "Mise à jour du sous-dossier /web: ${COMMIT_MESSAGE}"
