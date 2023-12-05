@@ -1,4 +1,4 @@
-name: Mirror repository Epitech
+name: Copier le Repository Complet
 
 on: push
 
@@ -9,27 +9,29 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
+      with:
+        ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Setup Git
+    - name: Setup SSH
       run: |
-        git config --global user.name 'Dinoozz'
-        git config --global user.email 'camille.lecoq@epitech.eu'
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-    - name: Cloner le dépôt distant
+    - name: Cloner le dépôt distant et pousser les changements
       run: |
-        git clone https://${ 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 }@github.com/EpitechMscProPromo2025/T-WEB-700-LIL_9.git temp_repo
-
-    - name: Préparer le dossier /web
-      run: |
-        mkdir -p temp_repo/web
-        rsync -av --exclude .github/workflows/ --exclude temp_repo/ . temp_repo/web/
-
-    - name: Commit et Push
-      run: |
+        # Cloner le dépôt distant via SSH
+        git clone git@github.com:EpitechMscProPromo2025/T-WEB-700-LIL_9.git temp_repo
+        # Copier les fichiers, sauf .github/workflows
+        rsync -av --exclude '.github/workflows/' . temp_repo/
+        # Pousser les changements
         cd temp_repo
         git add .
-        COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s" --abbrev-commit)
+        COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
         git commit -m "${COMMIT_MESSAGE}"
-        git push
-      env:
-        GITHUB_TOKEN: ${ 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 }
+        git push origin main
+
+    - name: Cleanup SSH
+      if: always()
+      run: rm -f ~/.ssh/id_rsa
