@@ -29,7 +29,7 @@ jobs:
         # Créer un sous-dossier /web s'il n'existe pas
         mkdir -p temp_repo/web
         # Copier tout sauf le dossier .git et .github/workflows dans le sous-dossier /web
-        rsync -av --exclude '.git' --exclude '.github/workflows/' . temp_repo/web/
+        rsync -av --exclude '.git' --exclude '.github/workflows/' --exclude temp_repo . temp_repo/web/
 
     - name: Configurer l'utilisateur Git
       run: |
