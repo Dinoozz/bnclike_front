@@ -45,7 +45,8 @@ const LoginRegister = () => {
   
     try {
       const response = await api.login(body);
-      // Juste vérifier la réponse sans essayer de lire le cookie
+      // Juste vérifier la réponse sans essayer de lire le cookie'
+      console.log("frero");
       console.log(response);
       console.log(response.status);
       if (response.status === 200) { // ou un autre indicateur de succès envoyé par votre serveur
