@@ -13,7 +13,7 @@ const Menu = () => {
       <div className="flex items-center">
         
         <Link to="/"><img src={logo} alt="Logo" className="h-12 w-12 mr-2" /></Link>
-        <Link to="/page1" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Page 1</Link>
+        <Link to="/page1" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Page SCD</Link>
         <Link to="/page2" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Page 2</Link>
         <Link to="/page3" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Page 3</Link>
         {isLoggedIn && <Link to="/admin" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Admin Dashboard</Link>}
