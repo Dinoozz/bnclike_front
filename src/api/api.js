@@ -17,7 +17,7 @@ const sendRequest = async (method, endpoint, data = {}) => {
         const response = await axios({ method, url, data, ...config });
         if (response.status === 206)
             axios.defaults.withCredentials = false
-        return response.data;
+        return response;
     } catch (error) {
         throw error.response ? error.response.data : new Error('An error occurred');
     }
@@ -28,14 +28,11 @@ const sendRequestWithoutAuth = async (method, endpoint, data = {}) => {
         const url = `${API_BASE_URL}${endpoint}`;
         console.log(url);
         const response = await axios({ method, url, data });
-        console.log("pute1");
         if (response) {
-            console.log("pute2");
             console.log(response.status);
-            return response;
-            console.log("pute3");
+            return response;;
         }
-        throw new Error("pute");
+        throw new Error();
     } catch (error) {
         throw error.response ? error.response.data : new Error('An error occurred');
     }

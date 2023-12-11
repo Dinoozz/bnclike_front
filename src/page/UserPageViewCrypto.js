@@ -45,9 +45,9 @@ const HomePage = () => {
       try {
         const top100Response = await api.getTop100();
         const allCryptosResponse = await api.getAllCryptos();
-        setCryptoData(top100Response);
-        setOriginalData(top100Response); // Sauvegarde des données originales
-        setAllCryptos(allCryptosResponse);
+        setCryptoData(top100Response.data);
+        setOriginalData(top100Response.data); // Sauvegarde des données originales
+        setAllCryptos(allCryptosResponse.data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching data: ', error);
