@@ -3,36 +3,79 @@ import api from '../api/api';
 
 export const AuthContext = createContext();
 
+const LoadingPage = () => {
+  const barStyle = {
+    width: '2vw',
+    height: '4vh',
+    backgroundColor: 'darkblue',
+    marginRight: '1vw',
+    animation: 'bounce 0.6s infinite ease-in-out',
+  };
+
+  const barAnimation = {
+    '@keyframes bounce': {
+      '0%, 100%': {
+        transform: 'translateY(0)',
+      },
+      '50%': {
+        transform: 'translateY(-2vh)',
+      },
+    },
+  };
+
+  // Ajouter l'animation dans une balise de style
+  const animationStyle = `
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-2vh);
+      }
+    }
+  `;
+
+  return (
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      backgroundImage: '../assets/bg-loading.webp',
+      backgroundSize: 'cover',
+      opacity: 0.5
+    }}>
+      <style>{animationStyle}</style>
+      <div style={{ ...barStyle, animationDelay: '0s' }}></div>
+      <div style={{ ...barStyle, animationDelay: '0.2s' }}></div>
+      <div style={{ ...barStyle, marginRight: '0', animationDelay: '0.4s' }}></div>
+    </div>
+  );
+};
+
+
+
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("JWToken");
-
     const fetchData = async () => {
       try {
-        // Essayez d'obtenir le rôle de l'utilisateur en utilisant le token
-        console.log("chalu");
         const response = await api.getUserRole();
-        console.log(response.message);
-        console.log(response.error);
-
-        // Si la réponse indique un token valide, considérez l'utilisateur comme connecté
-        setIsLoggedIn(true);
-        setUserRole(response.role);
+        if (response && response.role) {
+          setIsLoggedIn(true);
+          setUserRole(response.role);
+        }
       } catch (error) {
-        
-        // En cas d'erreur, cela signifie que le token est invalide, appelez la fonction logOut
         logOut();
       } finally {
-        // Quelle que soit la réponse ou l'erreur, le chargement est terminé
         setLoading(false);
       }
     };
 
-    fetchData(); // Appelez la fonction asynchrone ici pour qu'elle s'exécute au chargement du composant
+    fetchData();
   }, []);
 
   const logIn = () => {
@@ -40,11 +83,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logOut = () => {
-    // Appelez la fonction logOut pour déconnecter l'utilisateur
     setIsLoggedIn(false);
     setUserRole(null);
     localStorage.removeItem("JWToken");
   };
+
+  if (loading) {
+    return <LoadingPage />;
+  }
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, logIn, logOut, userRole, loading }}>
@@ -52,3 +98,4 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
