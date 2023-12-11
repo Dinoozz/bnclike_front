@@ -31,7 +31,7 @@ jobs:
           [ -d "web-client" ] && rm -rf web-client
           
           # Cloner le dépôt
-          git clone https://github.com/Dinoozz/ScrapInterface.git web-client
+          git clone https://github.com/Dinoozz/bnclike_front.git web-client
           
           # Aller dans le dossier du projet et lancer Docker Compose
           cd web-client
