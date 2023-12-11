@@ -12,7 +12,8 @@ const CreateCryptoButton = ({ name, symbol, coinID, imageUrl, onResult }) => {
         try {
             const cryptoData = { name, symbol, coinID, image: imageUrl };
             const response = await api.createCrypto(cryptoData);
-            onResult(true, response);
+            if (response.status < 300 && response.status >= 200)
+                onResult(true, response.data);
         } catch (error) {
             onResult(false, error);
         } finally {
