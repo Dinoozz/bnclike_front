@@ -70,6 +70,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log("bizarre");
         const response = await api.getUserRole();
         console.log(response);
         if (response && response.data.role) {
