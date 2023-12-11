@@ -108,7 +108,7 @@ const api = {
     },
 
     async getUserRole() {
-        return sendRequest('get','/')
+        return sendRequest('get','/users/info/role')
     },
 
 

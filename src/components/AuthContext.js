@@ -16,7 +16,8 @@ export const AuthProvider = ({ children }) => {
 
         try {
           // Essayez d'obtenir le rôle de l'utilisateur en utilisant le token
-          const response = await api.getAllCryptos();
+          console.log("chalu");
+          const response = await api.getUserRole();
           console.log(response.message);
           console.log(response.error);
 
