@@ -3,13 +3,20 @@ import api from '../api/api';
 
 export const AuthContext = createContext();
 
+function timeout(delay) {
+  return new Promise( res => setTimeout(res, delay) );
+}
+
 const LoadingPage = () => {
   const barStyle = {
-    width: '2vw',
-    height: '4vh',
-    backgroundColor: 'darkblue',
+    width: '1vw',
+    height: '8vh',
+    backgroundColor: 'gold',
     marginRight: '1vw',
     animation: 'bounce 0.6s infinite ease-in-out',
+    boxShadow: '0 0 8px rgba(0, 0, 0, 0.6)', // Ombre portée
+    opacity: 0.9, // Légère transparence pour le fondu
+    transition: 'opacity 0.3s', // Transition en douceur de l'opacité
   };
 
   const barAnimation = {
@@ -41,7 +48,7 @@ const LoadingPage = () => {
       justifyContent: 'center',
       alignItems: 'center',
       height: '100vh',
-      backgroundImage: '../assets/bg-loading.webp',
+      backgroundImage: 'url("https://files.oaiusercontent.com/file-n6bwgiLsJlPzudCJJXUXGzJw?se=2023-12-11T15%3A54%3A18Z&sp=r&sv=2021-08-06&sr=b&rscc=max-age%3D31536000%2C%20immutable&rscd=attachment%3B%20filename%3D20a1f56b-25b0-47e9-b2bc-844d402f2f70.webp&sig=XjmiFDqffLFlHgY2IHqLcAvA8g/28wlytEvALcKPZws%3D")',
       backgroundSize: 'cover',
       opacity: 0.5
     }}>
@@ -71,6 +78,7 @@ export const AuthProvider = ({ children }) => {
       } catch (error) {
         logOut();
       } finally {
+        await timeout(1000);
         setLoading(false);
       }
     };
