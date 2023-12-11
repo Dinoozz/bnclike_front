@@ -21,7 +21,6 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           # Arrêter et supprimer tous les conteneurs Docker
-          sudo kill $(sudo lsof -t -i:80)
           docker stop $(docker ps -a -q)
           docker rm $(docker ps -a -q)
           
