@@ -40,24 +40,32 @@ const UserManager = () => {
   };
 
   const createUser = async () => {
-      try {
+    try {
       await api.register(newUser);
       setNewUser({ username: '', email: '', password: '' });
       await getAllUsers();
-      } catch (error) {
+    } catch (error) {
       console.error('Erreur lors de la création de l\'utilisateur:', error);
-      }
+    }
   };
 
   const updateUser = async (userId, user) => {
-      try {
-      console.log(user);
-      await api.updateUser(userId, user);
-      await getAllUsers();
-      } catch (error) {
-      console.error('Erreur lors de la mise à jour de l\'utilisateur:', error);
-      }
+    try {
+        // Créer un nouvel objet avec seulement les propriétés requises
+        const userToUpdate = {
+          username: user.username,
+          email: user.email,
+          password: user.password, // Assurez-vous de gérer correctement les mots de passe
+          role: user.role
+        };
+
+        await api.updateUser(userId, userToUpdate);
+        await getAllUsers();
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour de l\'utilisateur:', error);
+    }
   };
+
 
   const deleteUser = async (userId) => {
       if (window.confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
