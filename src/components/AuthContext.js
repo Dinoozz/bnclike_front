@@ -1,5 +1,4 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
 
 export const AuthContext = createContext();
@@ -64,7 +63,6 @@ const LoadingPage = () => {
 
 
 export const AuthProvider = ({ children }) => {
-  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState(null);
@@ -79,7 +77,6 @@ export const AuthProvider = ({ children }) => {
           setUserRole(response.role);
         }
       } catch (error) {
-        navigate('/');
         logOut();
       } finally {
         await timeout(1000);
