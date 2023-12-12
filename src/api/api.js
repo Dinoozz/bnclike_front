@@ -59,6 +59,7 @@ const api = {
     },
 
     async updateUser(userId, user) {
+        console.log("user:", user);
         return sendRequest('put', `/users/${userId}`, user);
     },
 
