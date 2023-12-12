@@ -13,6 +13,7 @@ const LoadingAnimation = () => {
 };
 
 const SortIcon = ({ isActive, isAsc }) => {
+  
   console.log("------------------------------");
   console.log("isActive :", isActive);
   console.log("isActive :",isAsc);
@@ -152,16 +153,16 @@ const HomePage = () => {
             <tr className="bg-gray-100">
               <th className="px-2 text-left">Crypto</th>
               <th className="px-2 cursor-pointer text-center" onClick={() => sortData('current_price', true)}>
-                Current Price {<SortIcon isActive={sortConfig.key === 'current_price'} isAsc={sortConfig.direction === 'asc'} />}
+                Current Price {<SortIcon isActive={sortConfig.key === 'current_price' && sortConfig.direction !== null} isAsc={sortConfig.direction === 'asc'} />}
               </th>
               <th className="px-2 cursor-pointer text-center" onClick={() => sortData('price_change_percentage_24h', true)}>
-                24h % {<SortIcon isActive={sortConfig.key === 'price_change_percentage_24h'} isAsc={sortConfig.direction === 'asc'} />}
+                24h % {<SortIcon isActive={sortConfig.key === 'price_change_percentage_24h'  && sortConfig.direction !== null} isAsc={sortConfig.direction === 'asc'} />}
               </th>
               <th className="px-2 cursor-pointer text-center" onClick={() => sortData('market_cap_change_percentage_24h', true)}>
-                Market Cap Change 24h {<SortIcon isActive={sortConfig.key === 'market_cap_change_percentage_24h'} isAsc={sortConfig.direction === 'asc'} />}
+                Market Cap Change 24h {<SortIcon isActive={sortConfig.key === 'market_cap_change_percentage_24h'  && sortConfig.direction !== null} isAsc={sortConfig.direction === 'asc'} />}
               </th>
               <th className="px-2 cursor-pointer text-center" onClick={() => sortData('fully_diluted_valuation', true)}>
-                Fully Diluted Valuation {<SortIcon isActive={sortConfig.key === 'fully_diluted_valuation'} isAsc={sortConfig.direction === 'asc'} />}
+                Fully Diluted Valuation {<SortIcon isActive={sortConfig.key === 'fully_diluted_valuation'  && sortConfig.direction !== null} isAsc={sortConfig.direction === 'asc'} />}
               </th>
               <th></th>
             </tr>
