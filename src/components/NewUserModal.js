@@ -14,7 +14,7 @@ const Modal = ({ onClose, children }) => {
               </svg>
             </button>
           </div>
-          <div className="mt-2 px-7 py-3">
+          <div className="mt-2 px-7 py-3 flex flex-col space-y-4">
             {children}
           </div>
         </div>
