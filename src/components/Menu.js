@@ -16,7 +16,7 @@ const Menu = () => {
         <Link to="/page1" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Page SCD</Link>
         <Link to="/page2" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Page 2</Link>
         <Link to="/page3" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Page 3</Link>
-        {isLoggedIn && <Link to="/admin" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Admin Dashboard</Link>}
+        <Link to="/admin" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Admin Dashboard</Link>
       </div>
       <div className="flex items-center">
       {!isLoggedIn && <Link to="/login" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Se connecter</Link>}

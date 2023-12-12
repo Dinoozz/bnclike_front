@@ -13,13 +13,6 @@ const LoadingAnimation = () => {
 };
 
 const SortIcon = ({ isActive, isAsc }) => {
-  
-  console.log("------------------------------");
-  console.log("isActive :", isActive);
-  console.log("isActive :",isAsc);
-  console.log("!isActive :", !isActive);
-  console.log("!isActive :", !isAsc);
-  console.log("------------------------------");
   return (
     <span className="inline-block ml-1">
       <span className={`inline-block ${isActive && isAsc ? 'text-green-600' : 'text-gray-500'}`}>▲</span>

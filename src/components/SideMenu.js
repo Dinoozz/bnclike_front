@@ -6,7 +6,6 @@ import { AuthContext } from './AuthContext';
 
 const Menu = () => {
     const jwtToken = localStorage.getItem('JWToken');
-    const { isLoggedIn } = useContext(AuthContext);
   
     return (
         <div className="flex pt-20">
