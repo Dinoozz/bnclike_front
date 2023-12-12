@@ -3,18 +3,11 @@ import axios from 'axios';
 
 const API_BASE_URL = 'https://api.camille-lecoq.com/api';
 
-
-const getAuthConfig = () => {
-    const JWtoken = localStorage.getItem('JWToken');
-    return JWtoken ? { headers: { 'Authorization': `Bearer ${JWtoken}` } } : {};
-};
-
 const sendRequest = async (method, endpoint, data = {}) => {
     try {
-        const config = getAuthConfig();
         axios.defaults.withCredentials = true
         const url = `${API_BASE_URL}${endpoint}`;
-        const response = await axios({ method, url, data, ...config });
+        const response = await axios({ method, url, data});
         if (response.status === 206)
             axios.defaults.withCredentials = false
         return response;
@@ -107,6 +100,10 @@ const api = {
     async getUserRole() {
         return sendRequest('get','/users/info/role')
     },
+
+    async getCryptoData(cryptoDatas) {
+        return sendRequest('get', '/cryptodatas', cryptoDatas)
+    }
 
 
     // ... ici, vous pouvez continuer avec d'autres méthodes si nécessaire
