@@ -98,12 +98,12 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("JWToken");
   };
 
-  const assignUserRole = (a) => {
-    setUserRole(a);
+  const assignUserRole = (role) => {
+    setUserRole(role);
   };
 
-  const assignUserID = (a) => {
-    setUserId(a);
+  const assignUserID = (id) => {
+    setUserId(id);
   };
 
   if (loading) {
@@ -111,7 +111,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, logIn, logOut, userRole, loading }}>
+    <AuthContext.Provider value={{ isLoggedIn, logIn, logOut, userRole, userId, assignUserRole, assignUserID }}>
       {children}
     </AuthContext.Provider>
   );

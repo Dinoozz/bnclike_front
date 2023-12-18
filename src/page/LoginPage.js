@@ -10,10 +10,7 @@ const LoginRegister = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(''); // État pour gérer les messages d'erreur
   const [isLogin, setIsLogin] = useState(true);
-  const { logIn } = useContext(AuthContext);
-  const { isLoggedIn } = useContext(AuthContext);
-  const { assignUserRole } = useContext(AuthContext);
-  const { assignUserID } = useContext(AuthContext);
+  const { logIn, isLoggedIn, assignUserRole, assignUserID } = useContext(AuthContext);
 
   useEffect(() => {
     if (isLoggedIn) {
