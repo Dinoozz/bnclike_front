@@ -72,6 +72,9 @@ export const AuthProvider = ({ children }) => {
       try {
         const response = await api.getUserRole();
         if (response && response.data.role) {
+          console.log(response);
+          console.log(response.data);
+          console.log(response.data.role);
           setIsLoggedIn(true);
           setUserRole(response.data.role);
         }
