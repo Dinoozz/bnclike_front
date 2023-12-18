@@ -45,13 +45,13 @@ const HomePage = () => {
     const fetchData = async () => {
       try {
         const allAutorizeCrypto = await api.getAllCryptos();
+        console.log("allc :" ,allAutorizeCrypto );
         const cryptoIds = allAutorizeCrypto.data.map(crypto => crypto._id);
         const body = {
           "cryptoIds" : cryptoIds
         }
         console.log("body", body);
         const allAutorizeCryptoDatas = await api.getCryptoData(body);
-        console.log("allc :" ,allAutorizeCrypto );
         console.log("datas:" , allAutorizeCryptoDatas);
         setCryptoData(allAutorizeCryptoDatas.data);
         setOriginalData(allAutorizeCryptoDatas.data); // Sauvegarde des données originales

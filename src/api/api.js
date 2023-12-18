@@ -7,6 +7,7 @@ const sendRequest = async (method, endpoint, data = {}) => {
     try {
         axios.defaults.withCredentials = true
         const url = `${API_BASE_URL}${endpoint}`;
+        console.log("ahhhhhhh", data);
         const response = await axios({ method, url, data});
         if (response.status === 206)
             axios.defaults.withCredentials = false
@@ -102,6 +103,7 @@ const api = {
     },
 
     async getCryptoData(cryptoDatas) {
+        console.log("ah", cryptoDatas);
         return sendRequest('get', '/cryptodatas', cryptoDatas)
     }
 
