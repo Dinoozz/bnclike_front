@@ -44,13 +44,15 @@ const HomePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const allAutorizeCrypto = await api.getAllCryptos();
+        const cryptoIds = allAutorizeCrypto.map(crypto => crypto._id);
         const body = {
-          "cryptoIds" : ["658062686489450c0baf46ea", "658062686489450c0baf46ec"]
+          "cryptoIds" : cryptoIds
         }
         const allAutorizeCryptoDatas = await api.getCryptoData(body);
-        console.log("datas:" , allAutorizeCryptoDatas);
-        const allAutorizeCrypto = await api.getAllCryptos();
+
         console.log("allc :" ,allAutorizeCrypto );
+        console.log("datas:" , allAutorizeCryptoDatas);
         setCryptoData(allAutorizeCryptoDatas.data);
         setOriginalData(allAutorizeCryptoDatas.data); // Sauvegarde des données originales
         setAllCryptos(allAutorizeCrypto.data);
