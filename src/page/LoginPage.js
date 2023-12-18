@@ -12,8 +12,8 @@ const LoginRegister = () => {
   const [isLogin, setIsLogin] = useState(true);
   const { logIn } = useContext(AuthContext);
   const { isLoggedIn } = useContext(AuthContext);
-  const { assignUserRole } = useState(null);
-  const { assignUserID } = useState(null);
+  const { assignUserRole } = useContext(AuthContext);
+  const { assignUserID } = useContext(AuthContext);
 
   useEffect(() => {
     if (isLoggedIn) {
