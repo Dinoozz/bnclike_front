@@ -102,7 +102,7 @@ const api = {
     },
 
     async getCryptoData(cryptoDatas) {
-        return sendRequest('get', '/cryptodatas', cryptoDatas)
+        return sendRequest('get', '/cryptodatas/65806731e187a645f1235e3d', cryptoDatas)
     }
 
 
