@@ -66,17 +66,16 @@ export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await api.getUserRole();
         if (response && response.data.role) {
-          console.log(response);
-          console.log(response.data);
-          console.log(response.data.role);
           setIsLoggedIn(true);
           setUserRole(response.data.role);
+          setUserId(response.data.userId);
         }
       } catch (error) {
         logOut();

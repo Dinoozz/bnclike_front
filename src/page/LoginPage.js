@@ -12,6 +12,7 @@ const LoginRegister = () => {
   const [isLogin, setIsLogin] = useState(true);
   const { logIn } = useContext(AuthContext);
   const { isLoggedIn } = useContext(AuthContext);
+  const { userRole } = useState(null);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -47,6 +48,7 @@ const LoginRegister = () => {
       const response = await api.login(body);
       // Juste vérifier la réponse sans essayer de lire le cookie'
       if (response) { // ou un autre indicateur de succès envoyé par votre serveur
+        userRole(response.data.role);
         logIn(); // Votre fonction de connexion, qui pourrait définir l'état connecté dans votre contexte d'authentification
         navigate('/'); // Rediriger vers la page d'accueil ou tableau de bord
       } else {
