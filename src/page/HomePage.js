@@ -49,7 +49,7 @@ const HomePage = () => {
         const body = {
           "cryptoIds" : cryptoIds
         }
-
+        console.log("body", body);
         const allAutorizeCryptoDatas = await api.getCryptoData(body);
         console.log("allc :" ,allAutorizeCrypto );
         console.log("datas:" , allAutorizeCryptoDatas);
