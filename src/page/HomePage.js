@@ -44,11 +44,17 @@ const HomePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const top100Response = await api.getTop100();
-        const allCryptosResponse = await api.getAllCryptos();
-        setCryptoData(top100Response.data);
-        setOriginalData(top100Response.data); // Sauvegarde des données originales
-        setAllCryptos(allCryptosResponse.data);
+        console.log(allAutorizeCrypto);
+        const body = {
+          "cryptoIds" : ["658062686489450c0baf46ea", "658062686489450c0baf46ec"]
+        }
+        const allAutorizeCryptoDatas = await api.getCryptoData(body);
+        console.log("datas:" , allAutorizeCryptoDatas);
+        const allAutorizeCrypto = await api.getAllCryptos();
+        console.log("allc :" ,allAutorizeCrypto );
+        setCryptoData(allAutorizeCryptoDatas.data);
+        setOriginalData(allAutorizeCryptoDatas.data); // Sauvegarde des données originales
+        setAllCryptos(allAutorizeCrypto.data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching data: ', error);
