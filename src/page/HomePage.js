@@ -45,12 +45,12 @@ const HomePage = () => {
     const fetchData = async () => {
       try {
         const allAutorizeCrypto = await api.getAllCryptos();
-        const cryptoIds = allAutorizeCrypto.map(crypto => crypto._id);
+        const cryptoIds = allAutorizeCrypto.data.map(crypto => crypto._id);
         const body = {
           "cryptoIds" : cryptoIds
         }
-        const allAutorizeCryptoDatas = await api.getCryptoData(body);
 
+        const allAutorizeCryptoDatas = await api.getCryptoData(body);
         console.log("allc :" ,allAutorizeCrypto );
         console.log("datas:" , allAutorizeCryptoDatas);
         setCryptoData(allAutorizeCryptoDatas.data);
