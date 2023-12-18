@@ -57,10 +57,6 @@ const HomePage = () => {
     fetchData();
   }, []);
 
-  const isCryptoInAllCryptos = (crypto) => {
-    return allCryptos.some((c) => c.name === crypto.name);
-  };
-
 
   const sortData = (key, isNumeric) => {
   
@@ -146,9 +142,8 @@ const HomePage = () => {
           </thead>
           <tbody>
             {filteredData.map((crypto) => {
-              const isInAllCryptos = isCryptoInAllCryptos(crypto);
               return (
-                <tr key={crypto.id} className={`border-b border-gray-200 hover:bg-gray-100 ${isInAllCryptos ? 'bg-green-100' : 'bg-red-100'}`}>
+                <tr key={crypto.id} className={`border-b border-gray-200 hover:bg-gray-100`}>
                   <td className="px-2 flex items-center justify-start h-12">
                     <img src={crypto.image} alt={crypto.name} className="h-6 w-6 mr-2" />
                     <div>
