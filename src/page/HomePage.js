@@ -147,32 +147,33 @@ const HomePage = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((crypto) => (
-              <React.Fragment key={crypto.id}>
-                <tr className={`border-b border-gray-200 hover:bg-gray-100 cursor-pointer`} onClick={() => handleRowClick(crypto)}>
-                  <td className="px-2 flex items-center justify-start h-12">
-                    <img src={crypto.image} alt={crypto.name} className="h-6 w-6 mr-2" />
-                    <div>
-                      <span className="font-medium">{crypto.symbol.toUpperCase()}</span>
-                      <span className="text-sm text-gray-500 pl-2">{crypto.name}</span>
-                    </div>
-                  </td>
-                  <td className="text-center">{crypto.current_price} €</td>
-                  <td className={`text-center ${crypto.price_change_percentage_24h > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {crypto.price_change_percentage_24h}%
-                  </td>
-                  <td className={`text-center ${crypto.market_cap_change_percentage_24h > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {crypto.market_cap_change_percentage_24h}%
-                  </td>
-                  <td className="text-center">{formatValuation(crypto.fully_diluted_valuation)}</td>
-                  <td className="text-center">
-                    <span className="inline-block ml-2">{selectedCrypto === crypto ? '▼' : '▲'}</span>
-                  </td>
-                </tr>
-                {selectedCrypto === crypto && <tr><td colSpan="6"><CryptoDetails crypto={crypto} /></td></tr>}
-              </React.Fragment>
-            ))}
-          </tbody>
+          {filteredData.map((crypto) => (
+            <React.Fragment key={crypto.id}>
+              <tr className={`border-b border-gray-200 hover:bg-gray-100 cursor-pointer`} onClick={() => handleRowClick(crypto)}>
+                <td className="px-2 flex items-center justify-start h-12">
+                  <img src={crypto.image} alt={crypto.name} className="h-6 w-6 mr-2" />
+                  <div>
+                    <span className="font-medium">{crypto.symbol.toUpperCase()}</span>
+                    <span className="text-sm text-gray-500 pl-2">{crypto.name}</span>
+                  </div>
+                </td>
+                <td className="text-center">{crypto.current_price} €</td>
+                <td className={`text-center ${crypto.price_change_percentage_24h > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {crypto.price_change_percentage_24h}%
+                </td>
+                <td className={`text-center ${crypto.market_cap_change_percentage_24h > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {crypto.market_cap_change_percentage_24h}%
+                </td>
+                <td className="text-center">{formatValuation(crypto.fully_diluted_valuation)}</td>
+                <td className="text-center">
+                  <span className="inline-block ml-2">{selectedCrypto === crypto ? '▼' : '▲'}</span>
+                </td>
+              </tr>
+              {selectedCrypto === crypto && <tr><td colSpan="6"><CryptoDetails crypto={crypto} /></td></tr>}
+            </React.Fragment>
+          ))}
+        </tbody>
+
         </table>
       </div>
     </div>

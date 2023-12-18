@@ -13,7 +13,8 @@ const CryptoDetails = ({ crypto }) => {
         {/* Ajoutez d'autres détails que vous souhaitez afficher */}
       </div>
     );
-  };
+
+};
 
   
 export default CryptoDetails;
