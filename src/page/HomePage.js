@@ -44,7 +44,6 @@ const HomePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(allAutorizeCrypto);
         const body = {
           "cryptoIds" : ["658062686489450c0baf46ea", "658062686489450c0baf46ec"]
         }
