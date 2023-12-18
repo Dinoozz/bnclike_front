@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import CryptoDetails from '../components/CryptoDetailsSlider';
 import api from '../api/api';
 
 
@@ -36,6 +37,7 @@ const HomePage = () => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [allCryptos, setAllCryptos] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCrypto, setSelectedCrypto] = useState(null); // État pour stocker la crypto sélectionnée
 
 
   
@@ -103,6 +105,10 @@ const HomePage = () => {
         crypto.symbol.toLowerCase().includes(searchTerm)
       )
     : cryptoData;
+  
+  const handleRowClick = (crypto) => {
+    setSelectedCrypto(selectedCrypto === crypto ? null : crypto); // Basculer les détails
+  };
 
   if (loading) {
     return <LoadingAnimation />;
@@ -141,9 +147,9 @@ const HomePage = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((crypto) => {
-              return (
-                <tr key={crypto.id} className={`border-b border-gray-200 hover:bg-gray-100`}>
+            {filteredData.map((crypto) => (
+              <React.Fragment key={crypto.id}>
+                <tr className={`border-b border-gray-200 hover:bg-gray-100 cursor-pointer`} onClick={() => handleRowClick(crypto)}>
                   <td className="px-2 flex items-center justify-start h-12">
                     <img src={crypto.image} alt={crypto.name} className="h-6 w-6 mr-2" />
                     <div>
@@ -151,7 +157,7 @@ const HomePage = () => {
                       <span className="text-sm text-gray-500 pl-2">{crypto.name}</span>
                     </div>
                   </td>
-                  <td className="text-center">${crypto.current_price}</td>
+                  <td className="text-center">{crypto.current_price} €</td>
                   <td className={`text-center ${crypto.price_change_percentage_24h > 0 ? 'text-green-600' : 'text-red-600'}`}>
                     {crypto.price_change_percentage_24h}%
                   </td>
@@ -159,10 +165,13 @@ const HomePage = () => {
                     {crypto.market_cap_change_percentage_24h}%
                   </td>
                   <td className="text-center">{formatValuation(crypto.fully_diluted_valuation)}</td>
-                  <td></td>
+                  <td className="text-center">
+                    <span className="inline-block ml-2">{selectedCrypto === crypto ? '▼' : '▲'}</span>
+                  </td>
                 </tr>
-              );
-            })}
+                {selectedCrypto === crypto && <tr><td colSpan="6"><CryptoDetails crypto={crypto} /></td></tr>}
+              </React.Fragment>
+            ))}
           </tbody>
         </table>
       </div>
