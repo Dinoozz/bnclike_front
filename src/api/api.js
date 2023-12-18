@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-const API_BASE_URL = 'https://api.camille-lecoq.com/api';
+const API_BASE_URL = 'https://api2.camille-lecoq.com/api';
 
 const sendRequest = async (method, endpoint, data = {}) => {
     try {
