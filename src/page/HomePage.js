@@ -51,7 +51,7 @@ const HomePage = () => {
           "cryptoIds" : cryptoIds
         }
         console.log("body", body);
-        const allAutorizeCryptoDatas = await api.getCryptoData(body);
+        const allAutorizeCryptoDatas = await api.getCryptoData(JSON.stringify(body));
         console.log("datas:" , allAutorizeCryptoDatas);
         setCryptoData(allAutorizeCryptoDatas.data);
         setOriginalData(allAutorizeCryptoDatas.data); // Sauvegarde des données originales
