@@ -98,6 +98,14 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("JWToken");
   };
 
+  const assignUserRole = (a) => {
+    setUserRole(a);
+  };
+
+  const assignUserID = (a) => {
+    setUserId(a);
+  };
+
   if (loading) {
     return <LoadingPage />;
   }
