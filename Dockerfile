@@ -6,6 +6,6 @@ COPY . .
 RUN npm install
 
 EXPOSE 80
-CMD ["npm", "run", "build"]
+CMD ["npm", "run build"]
 
 
