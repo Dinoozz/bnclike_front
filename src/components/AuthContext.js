@@ -76,6 +76,7 @@ export const AuthProvider = ({ children }) => {
           setIsLoggedIn(true);
           setUserRole(response.data.role);
           setUserId(response.data.userId);
+          console.log("pleurer:", response.data.userId )
         }
       } catch (error) {
         logOut();
