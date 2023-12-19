@@ -158,7 +158,7 @@ const HomePage = () => {
             <React.Fragment key={crypto.id}>
               <tr className={`border-b border-gray-200 hover:bg-gray-100 cursor-pointer`} onClick={() => handleRowClick(crypto)}>
                 <td className="px-2 flex items-center justify-start h-12">
-                  <img src={crypto.image} alt={crypto.name} className="h-6 w-6 mr-2" />
+                  <img src={crypto.crypto.image} alt={crypto.name} className="h-6 w-6 mr-2" />
                   <div>
                     <span className="font-medium">{crypto.symbol.toUpperCase()}</span>
                     <span className="text-sm text-gray-500 pl-2">{crypto.name}</span>
