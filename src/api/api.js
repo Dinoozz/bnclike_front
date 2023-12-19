@@ -101,8 +101,8 @@ const api = {
         return sendRequest('get','/users/info/role')
     },
 
-    async getCryptoData(cryptoDatas) {
-        return sendRequest('get', '/cryptodatas/65806731e187a645f1235e3d', cryptoDatas)
+    async getCryptoData(cryptoIds) {
+        return sendRequest('get', `/cryptodatas/${cryptoIds}`)
     }
 
 
