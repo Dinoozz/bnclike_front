@@ -13,16 +13,15 @@ const ProfilePage = () => {
         email: '',
         role: ''
     });
-    const [userTeamName, setUserTeamName] = useState('');
 
     useEffect(() => {
         fetchUserInfo();
-        fetchUserTeam();
     }, []);
 
     const fetchUserInfo = async () => {
         try {
             const response = await api.getUserInfo();
+            console.log("Salope :", response);
             setUserInfo({
                 username: response.username,
                 email: response.email,
@@ -30,19 +29,6 @@ const ProfilePage = () => {
             });
         } catch (error) {
             console.error('Erreur lors de la récupération des informations de l\'utilisateur:', error);
-        }
-    };
-
-    const fetchUserTeam = async () => {
-        try {
-            const teamResponse = await api.getUserTeam();
-            const teamId = teamResponse.team;
-            if (teamId) {
-                const teamInfo = await api.getTeamById(teamId);
-                setUserTeamName(teamInfo.name);
-            }
-        } catch (error) {
-            console.error('Erreur lors de la récupération de l\'équipe de l\'utilisateur:', error);
         }
     };
 
@@ -71,10 +57,6 @@ const ProfilePage = () => {
                   <div className="flex items-center border-b py-2">
                       <FaUser className="text-gray-400 mr-2" />
                       <span className="flex-grow">{userInfo.username}</span>
-                  </div>
-                  <div className="flex items-center border-b py-2">
-                      <FaUsers className="text-gray-400 mr-2" />
-                      <span className="flex-grow">Équipe : {userTeamName}</span>
                   </div>
                   <div className="flex items-center border-b py-2">
                       <FaBriefcase className="text-gray-400 mr-2" />
