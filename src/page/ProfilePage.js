@@ -27,9 +27,9 @@ const ProfilePage = () => {
           const response = await api.getUserById(userId); // Modifier pour utiliser getUserById
           console.log("Salope :", response); // Supposons que vous vouliez garder ce log
           setUserInfo({
-              username: response.username,
-              email: response.email,
-              role: response.role
+              username: response.data.username,
+              email: response.data.email,
+              role: response.data.role
           });
       } catch (error) {
           console.error('Erreur lors de la récupération des informations de l\'utilisateur:', error);
