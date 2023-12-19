@@ -164,14 +164,14 @@ const HomePage = () => {
                     <span className="text-sm text-gray-500 pl-2">{crypto.name}</span>
                   </div>
                 </td>
-                <td className="text-center">{crypto.current_price} €</td>
-                <td className={`text-center ${crypto.price_change_percentage_24h > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {crypto.price_change_percentage_24h}%
+                <td className="text-center">{crypto.price} €</td>
+                <td className={`text-center ${crypto.priceChange24h > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {crypto.priceChange24h}%
                 </td>
                 <td className={`text-center ${crypto.market_cap_change_percentage_24h > 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {crypto.market_cap_change_percentage_24h}%
                 </td>
-                <td className="text-center">{formatValuation(crypto.fully_diluted_valuation)}</td>
+                <td className="text-center">{formatValuation(crypto.marketCap)}</td>
                 <td className="text-center">
                   <span className="inline-block ml-2">{selectedCrypto === crypto ? '▼' : '▲'}</span>
                 </td>
