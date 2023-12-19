@@ -9,10 +9,9 @@ services:
       - "8080:80"
     volumes:
       - .:/app
-    command: nginx -g 'daemon off;'
     networks:
       - my_network
-      
+
   nginx:
     image: nginx:latest
     ports:
@@ -23,7 +22,7 @@ services:
       - ./nginx:/etc/nginx/conf.d
       - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
-      - express-app
+      - app
     networks:
       - my_network
 
