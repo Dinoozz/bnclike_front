@@ -7,7 +7,7 @@ import { FaUser, FaUsers, FaBriefcase, FaEnvelope, FaLock } from 'react-icons/fa
 
 const ProfilePage = () => {
     const navigate = useNavigate();
-    const { logOut } = useContext(AuthContext);
+    const { logOut, getUserId } = useContext(AuthContext); // Utiliser getUserId ici
     const [userInfo, setUserInfo] = useState({
         username: '',
         email: '',
@@ -15,22 +15,26 @@ const ProfilePage = () => {
     });
 
     useEffect(() => {
-        fetchUserInfo();
+      fetchUserInfo();
+      const userId = getUserId(); // Récupérer l'ID de l'utilisateur
+      fetchUserInfo(userId);
     }, []);
 
-    const fetchUserInfo = async () => {
-        try {
-            const response = await api.getUserInfo();
-            console.log("Salope :", response);
-            setUserInfo({
-                username: response.username,
-                email: response.email,
-                role: response.role
-            });
-        } catch (error) {
-            console.error('Erreur lors de la récupération des informations de l\'utilisateur:', error);
-        }
-    };
+    const fetchUserInfo = async (userId) => {
+      if (!userId) return; // S'assurer que l'ID est présent
+
+      try {
+          const response = await api.getUserById(userId); // Modifier pour utiliser getUserById
+          console.log("Salope :", response); // Supposons que vous vouliez garder ce log
+          setUserInfo({
+              username: response.username,
+              email: response.email,
+              role: response.role
+          });
+      } catch (error) {
+          console.error('Erreur lors de la récupération des informations de l\'utilisateur:', error);
+      }
+  };
 
     const handleLogout = async () => {
         try {

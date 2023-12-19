@@ -106,12 +106,14 @@ export const AuthProvider = ({ children }) => {
     setUserId(id);
   };
 
+  const getUserId = () => userId;
+
   if (loading) {
     return <LoadingPage />;
   }
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, logIn, logOut, userRole, userId, assignUserRole, assignUserID }}>
+    <AuthContext.Provider value={{ isLoggedIn, logIn, logOut, userRole, userId, assignUserRole, assignUserID, getUserId }}>
       {children}
     </AuthContext.Provider>
   );
