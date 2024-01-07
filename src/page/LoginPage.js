@@ -12,6 +12,8 @@ const LoginRegister = () => {
   const [error, setError] = useState(''); // État pour gérer les messages d'erreur
   const [isLogin, setIsLogin] = useState(true);
   const { logIn, isLoggedIn, assignUserRole, assignUserID } = useContext(AuthContext);
+  const [externalPopup, setExternalPopup] = useState(null);
+
   
   useEffect(() => {
     if (isLoggedIn) {
@@ -59,10 +61,12 @@ const LoginRegister = () => {
     }
   };
   
-  const handleGoogleLogin = async () => {
+  /*const handleGoogleLogin = async () => {
       try {
+        console.log("ara");
         const response = await api.loginWithGoogle();
-        if (response) {
+        console.log("kiri");
+        if (response && response.data) {
             assignUserRole(response.data.role);
             assignUserID(response.data.userId);
             logIn();
@@ -73,8 +77,52 @@ const LoginRegister = () => {
     } catch (error) {
         setError(error ? error : "Google login error");
     }
+  };*/
+
+  const handleGoogleLogin = () => {
+    const width = 500;
+    const height = 400;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2.5;
+    const url = "http://localhost:4000/api/auths/google";
+
+    const popup = window.open(
+      url,
+      'Google Login',
+      `width=${width},height=${height},left=${left},top=${top}`
+    );
+
+    setExternalPopup(popup);
   };
 
+  useEffect(() => {
+    if (!externalPopup) return;
+
+    const intervalId = setInterval(() => {
+      if (!externalPopup.closed) {
+        try {
+          const popupURL = new URL(externalPopup.location.href);
+          const code = popupURL.searchParams.get('code');
+          if (code) {
+            console.log(`Code from popup: ${code}`);
+            // Ici, utilisez le code pour obtenir un token ou pour vous connecter
+            // par exemple : YourApi.endpoint(code)
+            clearInterval(intervalId);
+            externalPopup.close();
+            setExternalPopup(null); // Nettoyer l'état
+          }
+        } catch (error) {
+          // Erreurs de cross-origin sont normales si la popup n'est pas encore redirigée
+        }
+      } else {
+        clearInterval(intervalId);
+        setExternalPopup(null); // Nettoyer l'état si la popup est fermée manuellement
+      }
+    }, 500);
+
+    // Nettoyer l'intervalle quand le composant est démonté ou la popup est fermée
+    return () => clearInterval(intervalId);
+  }, [externalPopup]);
 
   // Définir le style des inputs en cas d'erreur
   
@@ -129,6 +177,14 @@ const LoginRegister = () => {
               <button type="submit" className="w-full p-3 mt-4 bg-indigo-600 text-white rounded shadow">
                 {isLogin ? 'Login' : 'Register'}
               </button>
+              <button
+                type="button"
+                onClick={handleGoogleLogin}
+                className="w-full p-3 mt-4 bg-red-500 text-white rounded shadow flex items-center justify-center"
+              >
+                <FaGoogle className="mr-2" />
+                Se connecter via Google
+              </button>
             </form>
               
           </div>
@@ -137,13 +193,7 @@ const LoginRegister = () => {
             <button onClick={toggleForm} className="font-medium text-indigo-600">
               {isLogin ? 'Need an account? Register' : 'Already have an account? Login'}
             </button>
-            <button
-                    onClick={handleGoogleLogin}
-                    className="w-full p-3 mt-4 bg-red-500 text-white rounded shadow flex items-center justify-center"
-                >
-                    <FaGoogle className="mr-2" />
-                    Se connecter via Google
-                </button>
+            
           </div>
         </div>
       </div>
