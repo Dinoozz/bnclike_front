@@ -84,7 +84,7 @@ const LoginRegister = () => {
     const height = 400;
     const left = window.screenX + (window.outerWidth - width) / 2;
     const top = window.screenY + (window.outerHeight - height) / 2.5;
-    const url = "http://localhost:4000/api/auths/google";
+    const url = "https://api2.camille-lecoq.com/api/auths/google";
 
     const popup = window.open(
       url,
