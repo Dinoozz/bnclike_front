@@ -48,7 +48,7 @@ const LoginRegister = () => {
     try {
       const response = await api.login(body);
       // Juste vérifier la réponse sans essayer de lire le cookie'
-      if (response) { // ou un autre indicateur de succès envoyé par votre serveur
+      if (response && response.status === 200) { // ou un autre indicateur de succès envoyé par votre serveur
         assignUserRole(response.data.role);
         assignUserID(response.data.userId);
         logIn(); // Votre fonction de connexion, qui pourrait définir l'état connecté dans votre contexte d'authentification
