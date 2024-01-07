@@ -9,14 +9,13 @@ const Menu = () => {
   const { isLoggedIn , userRole} = useContext(AuthContext);
 
   return (
-    <nav className="bg-gray-800 p-4 flex justify-between items-center fixed w-full">
-      <div className="flex items-center">
+    <nav className="bg-gray-800 p-4 flex justify-between items-center w-full">
+      <div className="flex items-center z-20">
         
         <Link to="/"><img src={logo} alt="Logo" className="h-12 w-12 mr-2" /></Link>
-        <Link to="/page1" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Page SCD</Link>
-        <Link to="/page2" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Page 2</Link>
-        <Link to="/page3" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Page 3</Link>
-        { isLoggedIn && userRole === 'admin' && <Link to="/admin" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Admin Dashboard</Link>}
+        <Link to="/" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Accueil</Link>
+        <Link to="/rss" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Actualités</Link>
+        { isLoggedIn && userRole === 'admin' && <Link to="/admin/top100" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Admin Dashboard</Link>}
       </div>
       <div className="flex items-center">
         {!isLoggedIn && <Link to="/login" className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Se connecter</Link>}

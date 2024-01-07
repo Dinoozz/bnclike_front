@@ -2,6 +2,7 @@ import axios from 'axios';
 
 
 const API_BASE_URL = 'https://api2.camille-lecoq.com/api';
+//const API_BASE_URL = 'http://localhost:4000/api';
 
 const sendRequest = async (method, endpoint, data = {}) => {
     try {
@@ -37,12 +38,16 @@ const api = {
         return sendRequestWithoutAuth('post', '/auths/register', user);
     },
 
+    async loginWithGoogle(user) {
+        return sendRequestWithoutAuth('get', '/auths/google', user);
+    },
+
     async login(user) {
         return sendRequestWithoutAuth('post', '/auths/login', user);
     },
 
     async logout() {
-        return sendRequest('post', '/auths/logout', {});
+        return sendRequest('get', '/auths/logout', {});
     },
 
     /* CRUD user */
@@ -103,8 +108,59 @@ const api = {
 
     async getCryptoData(cryptoIds) {
         return sendRequest('get', `/cryptodatas/${cryptoIds}`)
-    }
+    },
 
+    async getCandlesticksData(cryptoIds, period) {
+        return sendRequest('get', `/cryptodatas/fiddlesticks/${cryptoIds}/${period}`)
+    },
+
+    async getUserAuthorizedCrypto() {
+        return sendRequest('get', `/users/autorized-crypto`);
+    },
+
+    async addCryptoToUser(cryptoId) {
+        return sendRequest('post', `/users/add-crypto/${cryptoId}`);
+    },
+
+    async removeCryptoToUser(cryptoId) {
+        return sendRequest('delete', `/users/remove-crypto/${cryptoId}`);
+    },
+
+    /* rss's methods */
+
+    async getRssFeedByKeywords() {
+        return sendRequest('get', `/articles`);
+    },
+
+    async getArticleById(articleId) {
+        return sendRequest('get', `/articles/${articleId}`);
+    },
+
+    /* keyword's methods */
+
+    async createKeyword(keywordData) {
+        return sendRequest('post', `/keywords`, keywordData);
+    },
+
+    async add_user_to_keyword(keywordId, userId) {
+        return sendRequest('post', `/keywords/add-user/${keywordId}`, userId);
+    },
+
+    async remove_user_to_keyword(keywordId, userId) {
+        return sendRequest('delete', `/keywords/remove-user/${keywordId}`,userId);
+    },
+
+    async get_keywords_by_userId(userId) {
+        return sendRequest('get', `/keywords/by-user/${userId}`);
+    },
+
+    async getAllKeywords() {
+        return sendRequest('get', `/keywords`);
+    },
+
+    async deleteKeywordById(keywordId) {
+        return sendRequest('delete', `/keywords/${keywordId}`);
+    },
 
     // ... ici, vous pouvez continuer avec d'autres méthodes si nécessaire
 };

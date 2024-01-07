@@ -140,7 +140,7 @@ const HomePage = () => {
         />
       </div>
   
-      <div className="overflow-x-auto">
+      <div className="overflow-y-auto overflow-hidden max-h-full">
         <table className="min-w-full leading-normal">
           <thead>
             <tr className="bg-gray-100">

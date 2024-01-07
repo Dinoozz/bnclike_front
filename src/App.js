@@ -8,6 +8,7 @@ import ProfilePage from './page/ProfilePage';
 import SideMenu from './components/SideMenu';
 import AdminPageTop100 from './page/AdminPageViewTop100crypto';
 import UserManagerPage from './page/UserManagerPage';
+import RssPage from './page/RssPage'
 // Importez d'autres pages selon vos besoins
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/rss" element={<RssPage />} />
             <Route path="/admin" element={<SideMenu />}>
               <Route path="top100" element ={<AdminPageTop100 />}/>
               <Route path="users" element ={<UserManagerPage />}/>

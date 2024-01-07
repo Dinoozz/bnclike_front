@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaGoogle } from 'react-icons/fa';
 import { AuthContext } from '../components/AuthContext';
 import api from '../api/api';
 
@@ -58,7 +59,22 @@ const LoginRegister = () => {
     }
   };
   
-  
+  const handleGoogleLogin = async () => {
+      try {
+        const response = await api.loginWithGoogle();
+        if (response) {
+            assignUserRole(response.data.role);
+            assignUserID(response.data.userId);
+            logIn();
+            navigate('/');
+        } else {
+            setError("Google login failed");
+        }
+    } catch (error) {
+        setError(error ? error : "Google login error");
+    }
+  };
+
 
   // Définir le style des inputs en cas d'erreur
   
@@ -113,6 +129,13 @@ const LoginRegister = () => {
               <button type="submit" className="w-full p-3 mt-4 bg-indigo-600 text-white rounded shadow">
                 {isLogin ? 'Login' : 'Register'}
               </button>
+              <button
+                    onClick={handleGoogleLogin}
+                    className="w-full p-3 mt-4 bg-red-500 text-white rounded shadow flex items-center justify-center"
+                >
+                    <FaGoogle className="mr-2" />
+                    Se connecter via Google
+                </button>
             </form>
           </div>
 

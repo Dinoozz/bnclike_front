@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../components/AuthContext';
+
 import CryptoDetails from '../components/CryptoDetailsSlider';
 import api from '../api/api';
 
@@ -31,6 +33,7 @@ const formatValuation = (value) => {
 };
 
 const HomePage = () => {
+  const { isLoggedIn } = useContext(AuthContext);
   const [cryptoData, setCryptoData] = useState([]);
   const [originalData, setOriginalData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,15 +41,22 @@ const HomePage = () => {
   const [allCryptos, setAllCryptos] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCrypto, setSelectedCrypto] = useState(null); // État pour stocker la crypto sélectionnée
-
+  const [currency, setCurrency] = useState('€');
+  const conversionRate = 1.09;
 
   
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const allAutorizeCrypto = await api.getAllCryptos();
-        console.log("allc :" ,allAutorizeCrypto );
-        const cryptoIds = allAutorizeCrypto.data.map(crypto => crypto._id);
+        let cryptoIds;
+        let allAutorizeCrypto
+        if ( !isLoggedIn) {
+          allAutorizeCrypto = await api.getAllCryptos();
+          cryptoIds = allAutorizeCrypto.data.map(crypto => crypto._id);
+        } else {
+          allAutorizeCrypto = await api.getUserAuthorizedCrypto();
+          cryptoIds = allAutorizeCrypto.data.cryptos.map(crypto => crypto);
+        }
         const body = {
           "cryptoIds" : cryptoIds
         }
@@ -117,13 +127,21 @@ const HomePage = () => {
     setSelectedCrypto(selectedCrypto === crypto ? null : crypto); // Basculer les détails
   };
 
+  const handleCurrencyToggle = () => {
+    setCurrency(currency === '€' ? '$' : '€');
+  };
+
+  const convertValue = (value) => {
+    return currency === '$' ? (value * conversionRate).toFixed(2) : value;
+  };
+
   if (loading) {
     return <LoadingAnimation />;
   }
 
   return (
     <div className="container mx-auto py-8 px-20">
-      <div className="mb-4">
+      <div className="mb-4 flex justify-between">
         <input 
           type="text" 
           className="w-full px-3 py-2 rounded-full border focus:outline-none focus:ring focus:border-blue-300"
@@ -131,6 +149,12 @@ const HomePage = () => {
           value={searchTerm}
           onChange={handleSearchChange}
         />
+        <button 
+          onClick={handleCurrencyToggle} 
+          className="ml-4 px-3 py-2 bg-blue-500 text-white font-semibold rounded"
+        >
+          {currency === '€' ? '$' : '€'}
+        </button>
       </div>
   
       <div className="overflow-x-auto">
@@ -155,8 +179,8 @@ const HomePage = () => {
           </thead>
           <tbody>
           {filteredData.map((crypto) => (
-            <React.Fragment key={crypto.id}>
-              <tr className={`border-b border-gray-200 hover:bg-gray-100 cursor-pointer`} onClick={() => handleRowClick(crypto)}>
+            <React.Fragment key={crypto._id}>
+              <tr className={`border-b border-gray-200 hover:bg-gray-100`}>
                 <td className="px-2 flex items-center justify-start h-12">
                   <img src={crypto.crypto.image} alt={crypto.name} className="h-6 w-6 mr-2" />
                   <div>
@@ -164,19 +188,19 @@ const HomePage = () => {
                     <span className="text-sm text-gray-500 pl-2">{crypto.name}</span>
                   </div>
                 </td>
-                <td className="text-center">{crypto.price} €</td>
+                <td className="text-center">{convertValue(crypto.price)} {currency}</td>
                 <td className={`text-center ${crypto.priceChange24h > 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {crypto.priceChange24h}%
                 </td>
                 <td className={`text-center ${crypto.market_cap_change_percentage_24h > 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {crypto.market_cap_change_percentage_24h}%
                 </td>
-                <td className="text-center">{formatValuation(crypto.marketCap)}</td>
-                <td className="text-center">
-                  <span className="inline-block ml-2">{selectedCrypto === crypto ? '▼' : '▲'}</span>
+                <td className="text-center">{formatValuation(convertValue(crypto.marketCap))}</td>
+                <td className="text-center cursor-pointer"  onClick={() => handleRowClick(crypto)}>
+                  <span className="inline-block ml-2  bg-blue-400 rounded-full py-1 px-2">{selectedCrypto === crypto ? '▼' : '▲'}</span>
                 </td>
               </tr>
-              {selectedCrypto === crypto && <tr><td colSpan="6"><CryptoDetails crypto={crypto} /></td></tr>}
+              {selectedCrypto === crypto && <tr><td colSpan="6"><CryptoDetails crypto={crypto} convert={convertValue} /></td></tr>}
             </React.Fragment>
           ))}
         </tbody>
