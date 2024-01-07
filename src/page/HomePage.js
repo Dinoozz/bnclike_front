@@ -45,12 +45,12 @@ const HomePage = () => {
   const conversionRate = 1.09;
 
   
-  useEffect(() => {
+   useEffect(() => {
     const fetchData = async () => {
       try {
         let cryptoIds;
-        let allAutorizeCrypto
-        if ( !isLoggedIn) {
+        let allAutorizeCrypto;
+        if (!isLoggedIn) {
           allAutorizeCrypto = await api.getAllCryptos();
           cryptoIds = allAutorizeCrypto.data.map(crypto => crypto._id);
         } else {
@@ -58,21 +58,26 @@ const HomePage = () => {
           cryptoIds = allAutorizeCrypto.data.cryptos.map(crypto => crypto);
         }
         const body = {
-          "cryptoIds" : cryptoIds
+          "cryptoIds": cryptoIds
         }
         console.log("body", body);
         const allAutorizeCryptoDatas = await api.getCryptoData(cryptoIds.join());
-        console.log("datas:" , allAutorizeCryptoDatas);
-        setCryptoData(allAutorizeCryptoDatas.data);
-        setOriginalData(allAutorizeCryptoDatas.data); // Sauvegarde des données originales
-        setAllCryptos(allAutorizeCrypto.data);
+        console.log("datas:", allAutorizeCryptoDatas);
+
+        // Filtrer les cryptos qui ont des informations manquantes
+        const validCryptos = allAutorizeCryptoDatas.data.filter(crypto => {
+          return crypto && crypto.price !== undefined && crypto.symbol && crypto.name;
+        });
+
+        setCryptoData(validCryptos);
+        setOriginalData(validCryptos); // Sauvegarde des données originales
         setLoading(false);
       } catch (error) {
         console.error('Error fetching data: ', error);
         setLoading(false);
       }
     };
-  
+
     fetchData();
   }, []);
 
