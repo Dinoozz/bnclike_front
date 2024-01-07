@@ -46,13 +46,14 @@ const LoginRegister = () => {
     };
   
     try {
+      console.log("aled");
       const response = await api.login(body);
+      console.log("ouscour");
       if (response && response.data.role && response.data.userId) {
-        console.log(response);
         assignUserRole(response.data.role);
         assignUserID(response.data.userId);
         logIn(); 
-        //navigate('/');
+        navigate('/');
       } else {
         setError("Login failed");
       }
