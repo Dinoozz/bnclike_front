@@ -20,8 +20,12 @@ const sendRequest = async (method, endpoint, data = {}) => {
 const sendRequestWithoutAuth = async (method, endpoint, data = {}) => {
     try {
         const url = `${API_BASE_URL}${endpoint}`;
+        console.log("arrr");
         const response = await axios({ method, url, data });
+        console.log("err");
         if (response) {
+            console.log(response);
+            console.log(blarg)
             return response;
         }
         throw new Error();
