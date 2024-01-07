@@ -52,7 +52,7 @@ const LoginRegister = () => {
         assignUserRole(response.data.role);
         assignUserID(response.data.userId);
         logIn(); 
-        navigate('/');
+        //navigate('/');
       } else {
         setError("Login failed");
       }
@@ -60,24 +60,6 @@ const LoginRegister = () => {
       setError(error ? error : "Login error");
     }
   };
-  
-  /*const handleGoogleLogin = async () => {
-      try {
-        console.log("ara");
-        const response = await api.loginWithGoogle();
-        console.log("kiri");
-        if (response && response.data) {
-            assignUserRole(response.data.role);
-            assignUserID(response.data.userId);
-            logIn();
-            navigate('/');
-        } else {
-            setError("Google login failed");
-        }
-    } catch (error) {
-        setError(error ? error : "Google login error");
-    }
-  };*/
 
   const handleGoogleLogin = () => {
     const width = 500;
