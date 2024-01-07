@@ -22,7 +22,7 @@ const sendRequestWithoutAuth = async (method, endpoint, data = {}) => {
         const url = `${API_BASE_URL}${endpoint}`;
         const response = await axios({ method, url, data });
         if (response) {
-            return response;;
+            return response;
         }
         throw new Error();
     } catch (error) {
