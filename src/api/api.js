@@ -25,7 +25,7 @@ const sendRequestWithoutAuth = async (method, endpoint, data = {}) => {
         console.log("err");
         if (response) {
             console.log(response);
-            console.log(blarg)
+            console.log("blarg");
             return response;
         }
         throw new Error();
