@@ -67,6 +67,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [convCurrency, setConvCurrency] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,7 +77,19 @@ export const AuthProvider = ({ children }) => {
           setIsLoggedIn(true);
           setUserRole(response.data.role);
           setUserId(response.data.id);
-          console.log("pleurer:", response.data.id )
+        }
+        console.log(response);
+        const response2 = await api.getEurDol();
+        if (response2 && response2.data.usd.eur) {
+          localStorage.setItem("EURDOLCONV", response2.data.usd.eur.toString());
+        }
+        const response3 = await api.getUserById(response.data.id);
+        if (response3 && response3.data.vs_currency) {
+          if (response3.data.vs_currency === "eur") {
+            setConvCurrency("€");
+          } else if (response3.data.vs_currency === "usd") {
+            setConvCurrency("$");
+          }
         }
       } catch (error) {
         logOut();
@@ -85,7 +98,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
       }
     };
-
+  
     fetchData();
   }, []);
 
@@ -107,6 +120,10 @@ export const AuthProvider = ({ children }) => {
     setUserId(id);
   };
 
+  const assignConvCurrency = (currency) => {
+    setConvCurrency(currency);
+  };
+
   const getUserId = () => userId;
 
   if (loading) {
@@ -114,7 +131,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, logIn, logOut, userRole, userId, assignUserRole, assignUserID, getUserId }}>
+    <AuthContext.Provider value={{ isLoggedIn, logIn, logOut, userRole, userId, convCurrency, assignUserRole, assignUserID, getUserId, assignConvCurrency }}>
       {children}
     </AuthContext.Provider>
   );

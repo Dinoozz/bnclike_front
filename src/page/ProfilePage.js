@@ -55,7 +55,6 @@ const ProfilePage = () => {
                 let response = await api.getAllCryptos();
                 setCryptos(response.data);
                 response = await api.getUserAuthorizedCrypto();
-                console.log(response);
             } catch (error) {
                 console.error('Erreur lors de la récupération des cryptos:', error);
             }

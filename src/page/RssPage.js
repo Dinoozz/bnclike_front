@@ -16,7 +16,6 @@ const RssPage = () => {
     const fetchRssFeed = async () => {
       try {
         const response = await api.getRssFeedByKeywords();
-        console.log(response);
         setArticles(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération du flux RSS:', error);

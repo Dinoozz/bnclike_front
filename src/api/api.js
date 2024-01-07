@@ -20,10 +20,8 @@ const sendRequest = async (method, endpoint, data = {}) => {
 const sendRequestWithoutAuth = async (method, endpoint, data = {}) => {
     try {
         const url = `${API_BASE_URL}${endpoint}`;
-        console.log(url);
         const response = await axios({ method, url, data });
         if (response) {
-            console.log(response.status);
             return response;;
         }
         throw new Error();
@@ -160,6 +158,10 @@ const api = {
 
     async deleteKeywordById(keywordId) {
         return sendRequest('delete', `/keywords/${keywordId}`);
+    },
+
+    async getEurDol() {
+        return sendRequest('get', `/cryptodatas/usd/to/eur`);
     },
 
     // ... ici, vous pouvez continuer avec d'autres méthodes si nécessaire

@@ -33,7 +33,7 @@ const formatValuation = (value) => {
 };
 
 const HomePage = () => {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, convCurrency, userId } = useContext(AuthContext);
   const [cryptoData, setCryptoData] = useState([]);
   const [originalData, setOriginalData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,8 +41,8 @@ const HomePage = () => {
   const [allCryptos, setAllCryptos] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCrypto, setSelectedCrypto] = useState(null); // État pour stocker la crypto sélectionnée
-  const [currency, setCurrency] = useState('€');
-  const conversionRate = 1.09;
+  const [currency, setCurrency] = useState(convCurrency);
+  const conversionRate = 2 - localStorage.getItem("EURDOLCONV");
 
   
    useEffect(() => {
@@ -60,9 +60,7 @@ const HomePage = () => {
         const body = {
           "cryptoIds": cryptoIds
         }
-        console.log("body", body);
         const allAutorizeCryptoDatas = await api.getCryptoData(cryptoIds.join());
-        console.log("datas:", allAutorizeCryptoDatas);
 
         // Filtrer les cryptos qui ont des informations manquantes
         const validCryptos = allAutorizeCryptoDatas.data.filter(crypto => {
@@ -132,9 +130,20 @@ const HomePage = () => {
     setSelectedCrypto(selectedCrypto === crypto ? null : crypto); // Basculer les détails
   };
 
-  const handleCurrencyToggle = () => {
-    setCurrency(currency === '€' ? '$' : '€');
+  const handleCurrencyToggle = async () => {
+    const newCurrency = currency === '€' ? '$' : '€';
+    setCurrency(newCurrency);
+  
+    try {
+      const body = {
+        vs_currency: newCurrency === '€' ? 'eur' : 'usd'
+      };
+      await api.updateUser(userId, body); // Remplacer par l'appel API approprié
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour de la devise:', error);
+    }
   };
+  
 
   const convertValue = (value) => {
     return currency === '$' ? (value * conversionRate).toFixed(2) : value;
@@ -158,7 +167,7 @@ const HomePage = () => {
           onClick={handleCurrencyToggle} 
           className="ml-4 px-3 py-2 bg-blue-500 text-white font-semibold rounded"
         >
-          {currency === '€' ? '$' : '€'}
+          {currency === '€' ? '€' : '$'}
         </button>
       </div>
   
@@ -172,9 +181,6 @@ const HomePage = () => {
               </th>
               <th className="px-2 cursor-pointer text-center" onClick={() => sortData('price_change_percentage_24h', true)}>
                 24h % {<SortIcon isActive={sortConfig.key === 'price_change_percentage_24h'  && sortConfig.direction !== null} isAsc={sortConfig.direction === 'asc'} />}
-              </th>
-              <th className="px-2 cursor-pointer text-center" onClick={() => sortData('market_cap_change_percentage_24h', true)}>
-                Market Cap Change 24h {<SortIcon isActive={sortConfig.key === 'market_cap_change_percentage_24h'  && sortConfig.direction !== null} isAsc={sortConfig.direction === 'asc'} />}
               </th>
               <th className="px-2 cursor-pointer text-center" onClick={() => sortData('fully_diluted_valuation', true)}>
                 Fully Diluted Valuation {<SortIcon isActive={sortConfig.key === 'fully_diluted_valuation'  && sortConfig.direction !== null} isAsc={sortConfig.direction === 'asc'} />}
@@ -196,9 +202,6 @@ const HomePage = () => {
                 <td className="text-center">{convertValue(crypto.price)} {currency}</td>
                 <td className={`text-center ${crypto.priceChange24h > 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {crypto.priceChange24h}%
-                </td>
-                <td className={`text-center ${crypto.market_cap_change_percentage_24h > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {crypto.market_cap_change_percentage_24h}%
                 </td>
                 <td className="text-center">{formatValuation(convertValue(crypto.marketCap))}</td>
                 <td className="text-center cursor-pointer"  onClick={() => handleRowClick(crypto)}>
