@@ -29,12 +29,12 @@ const LoginRegister = () => {
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
-    if (error) setError(''); // Réinitialiser l'erreur lorsque l'utilisateur commence à taper
+    if (error) setError('');
   };
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
-    if (error) setError(''); // Réinitialiser l'erreur lorsque l'utilisateur commence à taper
+    if (error) setError('');
   };
   
 
@@ -47,13 +47,12 @@ const LoginRegister = () => {
   
     try {
       const response = await api.login(body);
-      // Juste vérifier la réponse sans essayer de lire le cookie'
-      console.log(response);
-      if (response && response.data.role && response.data.userId) { // ou un autre indicateur de succès envoyé par votre serveur
+      if (response && response.data.role && response.data.userId) {
+        console.log(response);
         assignUserRole(response.data.role);
         assignUserID(response.data.userId);
-        logIn(); // Votre fonction de connexion, qui pourrait définir l'état connecté dans votre contexte d'authentification
-        navigate('/'); // Rediriger vers la page d'accueil ou tableau de bord
+        logIn(); 
+        navigate('/');
       } else {
         setError("Login failed");
       }
