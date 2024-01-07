@@ -17,6 +17,9 @@ const ProfilePage = () => {
         email: '',
         role: ''
     });
+    const [isEditing, setIsEditing] = useState(false);
+    const [editableUserInfo, setEditableUserInfo] = useState({ ...userInfo });
+
 
     useEffect(() => {
         const fetchCryptosAndAuthorized = async () => {
@@ -73,6 +76,11 @@ const ProfilePage = () => {
               email: response.data.email,
               role: response.data.role
           });
+          setEditableUserInfo({
+            username: response.data.username,
+            email: response.data.email,
+            role: response.data.role
+        });
       } catch (error) {
           console.error('Erreur lors de la récupération des informations de l\'utilisateur:', error);
       }
@@ -126,9 +134,47 @@ const ProfilePage = () => {
         crypto.symbol.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const handleEditToggle = () => {
+        setIsEditing(!isEditing);
+        if (isEditing) {
+            // Remettre à zéro en cas d'annulation
+            setEditableUserInfo({ ...userInfo });
+        }
+    };
+
+    const handleInputChange = (e) => {
+        setEditableUserInfo({ ...editableUserInfo, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const userId = getUserId(); // Assurez-vous que getUserId retourne l'ID de l'utilisateur
+            let updateData = {};
+    
+            // Ajouter des champs au body de la requête uniquement s'ils sont présents
+            if (editableUserInfo.username) {
+                updateData.username = editableUserInfo.username;
+            }
+            if (editableUserInfo.email) {
+                updateData.email = editableUserInfo.email;
+            }
+            if (editableUserInfo.password) {
+                updateData.password = editableUserInfo.password;
+            }
+    
+            await api.updateUser(userId, updateData);
+    
+            // Mise à jour des infos de l'utilisateur après la modification
+            setUserInfo({ ...userInfo, ...updateData });
+            setIsEditing(false);
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour de l\'utilisateur:', error);
+        }
+    };
+    
+
     return (
         <div className="container mt-4 mx-auto p-4 bg-white shadow rounded-lg flex flex-row w-[50vw] max-w-full">
-            {/* Colonne de profil */}
             <div className='flex flex-col w-full'>
                 <div className='flex mb-8'>
                     <div className="flex flex-col w-full mr-4">
@@ -137,33 +183,63 @@ const ProfilePage = () => {
                         </div>
                         <h1 className="text-2xl font-semibold text-gray-800">{userInfo.username}</h1>
                         <div className="w-full flex flex-col p-4">
-                            <div className="flex items-center border-b py-2">
-                                <FaUser className="text-gray-400 mr-2" />
-                                <span className="flex-grow">{userInfo.username}</span>
-                            </div>
-                            <div className="flex items-center border-b py-2">
-                                <FaBriefcase className="text-gray-400 mr-2" />
-                                <span className="flex-grow">Rôle : {userInfo.role}</span>
-                            </div>
-                            <div className="flex items-center border-b py-2">
-                                <FaEnvelope className="text-gray-400 mr-2" />
-                                <span className="flex-grow">{userInfo.email}</span>
-                            </div>
-                            <div className="flex items-center border-b py-2">
-                                <FaLock className="text-gray-400 mr-2" />
-                                <span className="flex-grow">Password</span>
-                            </div>
+                            {isEditing ? (
+                                <>
+                                    <input
+                                        type="text"
+                                        name="username"
+                                        value={editableUserInfo.username}
+                                        onChange={handleInputChange}
+                                        className="mb-2 p-2 border rounded"
+                                    />
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={editableUserInfo.email}
+                                        onChange={handleInputChange}
+                                        className="mb-2 p-2 border rounded"
+                                    />
+                                    <input
+                                        name="password"
+                                        placeholder="Nouveau mot de passe"
+                                        onChange={handleInputChange}
+                                        className="mb-2 p-2 border rounded"
+                                    />
+                                    <button
+                                        onClick={handleSubmit}
+                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2"
+                                    >
+                                        Valider
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="flex items-center border-b py-2">
+                                        <FaUser className="text-gray-400 mr-2" />
+                                        <span className="flex-grow">{userInfo.username}</span>
+                                    </div>
+                                    <div className="flex items-center border-b py-2">
+                                        <FaEnvelope className="text-gray-400 mr-2" />
+                                        <span className="flex-grow">{userInfo.email}</span>
+                                    </div>
+                                    <div className="flex items-center border-b py-2">
+                                        <FaBriefcase className="text-gray-400 mr-2" />
+                                        <span className="flex-grow">Rôle : {userInfo.role}</span>
+                                    </div>
+                                    <button
+                                        onClick={handleEditToggle}
+                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                    >
+                                        Modifier le profil
+                                    </button>
+                                </>
+                            )}
                         </div>
                         <button
-                            onClick={() => handleLogout()}
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+                            onClick={handleLogout}
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full"
                         >
                             Déconnexion
-                        </button>
-                        <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full mt-4"
-                        >
-                            Edit Profile
                         </button>
                     </div>
 

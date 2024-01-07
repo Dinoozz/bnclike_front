@@ -72,26 +72,30 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const response2 = await api.getEurDol();
+        if (response2 && response2.data.usd.eur) {
+          localStorage.setItem("EURDOLCONV", response2.data.usd.eur.toString());
+        }
         const response = await api.getUserRole();
         if (response && response.data.role) {
           setIsLoggedIn(true);
           setUserRole(response.data.role);
           setUserId(response.data.id);
-        }
-        console.log(response);
-        const response2 = await api.getEurDol();
-        if (response2 && response2.data.usd.eur) {
-          localStorage.setItem("EURDOLCONV", response2.data.usd.eur.toString());
-        }
+        }        
         const response3 = await api.getUserById(response.data.id);
         if (response3 && response3.data.vs_currency) {
           if (response3.data.vs_currency === "eur") {
             setConvCurrency("€");
           } else if (response3.data.vs_currency === "usd") {
             setConvCurrency("$");
+          } else {
+            setConvCurrency("€");
           }
+        } else {
+          setConvCurrency("€");
         }
       } catch (error) {
+        setConvCurrency("€")
         logOut();
       } finally {
         await timeout(1000);

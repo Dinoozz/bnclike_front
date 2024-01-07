@@ -12,7 +12,7 @@ const LoginRegister = () => {
   const [error, setError] = useState(''); // État pour gérer les messages d'erreur
   const [isLogin, setIsLogin] = useState(true);
   const { logIn, isLoggedIn, assignUserRole, assignUserID } = useContext(AuthContext);
-
+  
   useEffect(() => {
     if (isLoggedIn) {
       // Redirigez l'utilisateur vers la page d'accueil s'il est déjà connecté
@@ -129,20 +129,21 @@ const LoginRegister = () => {
               <button type="submit" className="w-full p-3 mt-4 bg-indigo-600 text-white rounded shadow">
                 {isLogin ? 'Login' : 'Register'}
               </button>
-              <button
-                    onClick={handleGoogleLogin}
-                    className="w-full p-3 mt-4 bg-red-500 text-white rounded shadow flex items-center justify-center"
-                >
-                    <FaGoogle className="mr-2" />
-                    Se connecter via Google
-                </button>
             </form>
+              
           </div>
 
           <div className="flex justify-between p-8 text-sm border-t border-gray-300 bg-gray-100">
             <button onClick={toggleForm} className="font-medium text-indigo-600">
               {isLogin ? 'Need an account? Register' : 'Already have an account? Login'}
             </button>
+            <button
+                    onClick={handleGoogleLogin}
+                    className="w-full p-3 mt-4 bg-red-500 text-white rounded shadow flex items-center justify-center"
+                >
+                    <FaGoogle className="mr-2" />
+                    Se connecter via Google
+                </button>
           </div>
         </div>
       </div>
