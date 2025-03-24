@@ -52,7 +52,7 @@ const HomePage = () => {
       }
 
       const elapsedTime = Date.now() - startTime;
-      const waitTime = Math.max(500 - elapsedTime, 0);
+      const waitTime = Math.max(200 - elapsedTime, 0); // Modifier à 0,2s
 
       if (waitTime > 0) {
         await new Promise(resolve => setTimeout(resolve, waitTime));
