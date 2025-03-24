@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // URL de votre API Flask
-const API_BASE_URL = 'http://raspberrypi.local:5000';  // Remplacez par l'adresse IP ou URL correcte
+const API_BASE_URL = 'http://192.168.1.113:5000';  // Remplacez par l'adresse IP ou URL correcte
 
 // Fonction générique pour envoyer des requêtes API
 const sendRequest = async (method, endpoint, data = {}) => {
