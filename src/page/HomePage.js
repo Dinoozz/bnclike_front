@@ -1,224 +1,133 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../components/AuthContext';
-
-import CryptoDetails from '../components/CryptoDetailsSlider';
+import React, { useState, useEffect, useRef } from 'react';
+import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import api from '../api/api';
 
-
-const LoadingAnimation = () => {
-  return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
-    </div>
-  );
-};
-
-const SortIcon = ({ isActive, isAsc }) => {
-  return (
-    <span className="inline-block ml-1">
-      <span className={`inline-block ${isActive && isAsc ? 'text-green-600' : 'text-gray-500'}`}>▲</span>
-      <span className={`inline-block ${isActive && !isAsc ? 'text-green-600' : 'text-gray-500'}`}>▼</span>
-    </span>
-  );
-};
-
-const formatValuation = (value) => {
-  const num = value ?? 0;
-  if (num >= 1e6 && num < 1e9) {
-    return `${(num / 1e6).toFixed(2)}M`;
-  } else if (num >= 1e9) {
-    return `${(num / 1e9).toFixed(2)}B`;
-  }
-  return `${num.toFixed(2)}`;
-};
-
 const HomePage = () => {
-  const { isLoggedIn, convCurrency, userId } = useContext(AuthContext);
-  const [cryptoData, setCryptoData] = useState([]);
-  const [originalData, setOriginalData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-  const [allCryptos, setAllCryptos] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCrypto, setSelectedCrypto] = useState(null); // État pour stocker la crypto sélectionnée
-  const [currency, setCurrency] = useState(convCurrency);
-  const conversionRate = 2 - localStorage.getItem("EURDOLCONV");
+  const [isPressedUp, setIsPressedUp] = useState(false);
+  const [isAnimatingUp, setIsAnimatingUp] = useState(false);
+  const [isUpDisabled, setIsUpDisabled] = useState(false);
+  const isPressedDownRef = useRef(false); // Remplace l'état par une référence
 
-  
-   useEffect(() => {
-    const fetchData = async () => {
+  // Gestion du bouton UP
+  const handleUpMouseDown = async () => {
+    if (isUpDisabled || isAnimatingUp || isPressedUp) return;
+
+    setIsPressedUp(true);
+    setIsAnimatingUp(true);
+    setIsUpDisabled(true);
+
+    try {
+      const response = await api.up();
+      console.log('API UP response:', response);
+    } catch (error) {
+      console.error('Error with API UP request:', error);
+    }
+
+    setTimeout(() => {
+      setIsAnimatingUp(false);
+      setIsPressedUp(false);
+      setIsUpDisabled(false);
+    }, 850); 
+  };
+
+  const handleUpMouseUp = () => {
+    setIsPressedUp(false);
+    setIsUpDisabled(false);
+  };
+
+  // Gestion du bouton DOWN
+  const handleDownMouseDown = async () => {
+    if (isPressedDownRef.current) return;
+
+    isPressedDownRef.current = true; // Activer la référence
+
+    while (isPressedDownRef.current) {
+      const startTime = Date.now();
+
       try {
-        let cryptoIds;
-        let allAutorizeCrypto;
-        if (!isLoggedIn) {
-          allAutorizeCrypto = await api.getAllCryptos();
-          cryptoIds = allAutorizeCrypto.data.map(crypto => crypto._id);
-        } else {
-          allAutorizeCrypto = await api.getUserAuthorizedCrypto();
-          cryptoIds = allAutorizeCrypto.data.cryptos.map(crypto => crypto);
-        }
-        const body = {
-          "cryptoIds": cryptoIds
-        }
-        const allAutorizeCryptoDatas = await api.getCryptoData(cryptoIds.join());
-
-        // Filtrer les cryptos qui ont des informations manquantes
-        const validCryptos = allAutorizeCryptoDatas.data.filter(crypto => {
-          return crypto && crypto.price !== undefined && crypto.symbol && crypto.name;
-        });
-
-        setCryptoData(validCryptos);
-        setOriginalData(validCryptos); // Sauvegarde des données originales
-        setLoading(false);
+        const response = await api.down();
+        console.log('API DOWN response:', response);
       } catch (error) {
-        console.error('Error fetching data: ', error);
-        setLoading(false);
+        console.error('Error with API DOWN request:', error);
       }
-    };
 
-    fetchData();
+      const elapsedTime = Date.now() - startTime;
+      const waitTime = Math.max(500 - elapsedTime, 0);
+
+      if (waitTime > 0) {
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+      }
+    }
+  };
+
+  const handleDownMouseUp = () => {
+    isPressedDownRef.current = false; // Désactiver la référence
+  };
+
+  useEffect(() => {
+    window.addEventListener('mouseup', handleUpMouseUp);
+    window.addEventListener('touchend', handleUpMouseUp);
+
+    window.addEventListener('mouseup', handleDownMouseUp);
+    window.addEventListener('touchend', handleDownMouseUp);
+
+    return () => {
+      window.removeEventListener('mouseup', handleUpMouseUp);
+      window.removeEventListener('touchend', handleUpMouseUp);
+
+      window.removeEventListener('mouseup', handleDownMouseUp);
+      window.removeEventListener('touchend', handleDownMouseUp);
+    };
   }, []);
 
-
-  const sortData = (key, isNumeric) => {
-  
-    if (!key || key === 'image' || key === 'symbol') {
-      return; // Pas de tri pour 'image' et 'symbol'
-    }
-  
-    let newSortConfig = { ...sortConfig };
-    if (sortConfig.key === key) {
-      newSortConfig.direction = sortConfig.direction === 'asc' ? 'desc' : sortConfig.direction === 'desc' ? null : 'asc';
-    } else {
-      newSortConfig = { key, direction: 'asc' };
-    }
-  
-    if (newSortConfig.direction === null) {
-      setSortConfig(newSortConfig);
-      setCryptoData([...originalData]);
-    } else {
-      const sortedData = [...cryptoData].sort((a, b) => {
-        let aValue = a[key];
-        let bValue = b[key];
-    
-        if (isNumeric) {
-          aValue = aValue ? parseFloat(aValue.toString().replace(/[\%\$]/g, '')) : 0;
-          bValue = bValue ? parseFloat(bValue.toString().replace(/[\%\$]/g, '')) : 0;
-        }
-    
-        return newSortConfig.direction === 'asc' ? aValue - bValue : bValue - aValue;
-      });
-
-      setCryptoData(sortedData);
-    }
-  
-    setSortConfig(newSortConfig);
-  };
-
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value.toLowerCase());
-  };
-
-  const filteredData = searchTerm
-    ? cryptoData.filter((crypto) =>
-        crypto.name.toLowerCase().includes(searchTerm) || 
-        crypto.symbol.toLowerCase().includes(searchTerm)
-      )
-    : cryptoData;
-  
-  const handleRowClick = (crypto) => {
-    setSelectedCrypto(selectedCrypto === crypto ? null : crypto); // Basculer les détails
-  };
-
-  const handleCurrencyToggle = async () => {
-    const newCurrency = currency === '€' ? '$' : '€';
-    setCurrency(newCurrency);
-  
-    try {
-      const body = {
-        vs_currency: newCurrency === '€' ? 'eur' : 'usd'
-      };
-      await api.updateUser(userId, body); // Remplacer par l'appel API approprié
-    } catch (error) {
-      console.error('Erreur lors de la mise à jour de la devise:', error);
-    }
-  };
-  
-
-  const convertValue = (value) => {
-    return currency === '$' ? (value * conversionRate).toFixed(2) : value;
-  };
-
-  if (loading) {
-    return <LoadingAnimation />;
-  }
-
   return (
-    <div className="container mx-auto py-8 px-20">
-      <div className="mb-4 flex justify-between">
-        <input 
-          type="text" 
-          className="w-full px-3 py-2 rounded-full border focus:outline-none focus:ring focus:border-blue-300"
-          placeholder="Rechercher une crypto (nom ou symbole)" 
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
-        <button 
-          onClick={handleCurrencyToggle} 
-          className="ml-4 px-3 py-2 bg-blue-500 text-white font-semibold rounded"
-        >
-          {currency === '€' ? '€' : '$'}
-        </button>
-      </div>
-  
-      <div className="overflow-x-auto">
-        <table className="min-w-full leading-normal">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="px-2 text-left">Crypto</th>
-              <th className="px-2 cursor-pointer text-center" onClick={() => sortData('current_price', true)}>
-                Current Price {<SortIcon isActive={sortConfig.key === 'current_price' && sortConfig.direction !== null} isAsc={sortConfig.direction === 'asc'} />}
-              </th>
-              <th className="px-2 cursor-pointer text-center" onClick={() => sortData('price_change_percentage_24h', true)}>
-                24h % {<SortIcon isActive={sortConfig.key === 'price_change_percentage_24h'  && sortConfig.direction !== null} isAsc={sortConfig.direction === 'asc'} />}
-              </th>
-              <th className="px-2 cursor-pointer text-center" onClick={() => sortData('fully_diluted_valuation', true)}>
-                Fully Diluted Valuation {<SortIcon isActive={sortConfig.key === 'fully_diluted_valuation'  && sortConfig.direction !== null} isAsc={sortConfig.direction === 'asc'} />}
-              </th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-          {filteredData.map((crypto) => (
-            <React.Fragment key={crypto._id}>
-              <tr className={`border-b border-gray-200 hover:bg-gray-100`}>
-                <td className="px-2 flex items-center justify-start h-12">
-                  <img src={crypto.crypto.image} alt={crypto.name} className="h-6 w-6 mr-2" />
-                  <div>
-                    <span className="font-medium">{crypto.symbol.toUpperCase()}</span>
-                    <span className="text-sm text-gray-500 pl-2">{crypto.name}</span>
-                  </div>
-                </td>
-                <td className="text-center">{convertValue(crypto.price)} {currency}</td>
-                <td className={`text-center ${crypto.priceChange24h > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {crypto.priceChange24h}%
-                </td>
-                <td className="text-center">{formatValuation(convertValue(crypto.marketCap))}</td>
-                <td className="text-center cursor-pointer"  onClick={() => handleRowClick(crypto)}>
-                  <span className="inline-block ml-2  bg-blue-400 rounded-full py-1 px-2">{selectedCrypto === crypto ? '▼' : '▲'}</span>
-                </td>
-              </tr>
-              {selectedCrypto === crypto && <tr><td colSpan="6"><CryptoDetails crypto={crypto} convert={convertValue} /></td></tr>}
-            </React.Fragment>
-          ))}
-        </tbody>
+    <div className="flex flex-col items-center justify-around min-h-screen bg-gradient-to-br from-gray-800 to-gray-900">
 
-        </table>
+      {/* Conteneur du Titre */}
+      <div className="mb-10 px-8 py-4 rounded-lg bg-gray-700 shadow-xl">
+        <h1 className="text-4xl font-bold text-white text-center tracking-wider">🚪 Garage Remote</h1>
+      </div>
+
+      {/* Conteneur des Boutons */}
+      <div className="flex flex-col items-center justify-center space-y-12 p-10 bg-gray-700 rounded-3xl shadow-2xl border border-gray-600">
+
+        {/* Bouton Flèche Haut */}
+        <div className="relative flex items-center justify-center">
+          {isAnimatingUp && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-32 h-20 rounded-full border-4 border-blue-500 animate-ping"></div>
+            </div>
+          )}
+          <button
+            onMouseDown={handleUpMouseDown}
+            onTouchStart={handleUpMouseDown}
+            onMouseUp={handleUpMouseUp}
+            onTouchEnd={handleUpMouseUp}
+            disabled={isUpDisabled}
+            className={`relative flex items-center justify-center w-20 h-20 bg-white rounded-full shadow-xl 
+              ${isUpDisabled ? 'opacity-20 cursor-not-allowed' : 'hover:bg-blue-100 active:bg-blue-200'} 
+              transition-all duration-200`}
+          >
+            <FaArrowUp className="text-4xl text-blue-500" />
+          </button>
+        </div>
+
+        {/* Bouton Flèche Bas */}
+        <div className="relative flex items-center justify-center">
+          <button
+            onMouseDown={handleDownMouseDown}
+            onTouchStart={handleDownMouseDown}
+            onMouseUp={handleDownMouseUp}
+            onTouchEnd={handleDownMouseUp}
+            className="relative flex items-center justify-center w-20 h-20 bg-white rounded-full shadow-xl 
+              hover:bg-red-100 active:bg-red-200 transition-all duration-200"
+          >
+            <FaArrowDown className="text-4xl text-red-500" />
+          </button>
+        </div>
       </div>
     </div>
   );
-  
-  
 };
 
 export default HomePage;

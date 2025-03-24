@@ -13,26 +13,23 @@ import RssPage from './page/RssPage'
 
 const App = () => {
   return (
-    <AuthProvider>
       <Router>
         <div>
-          <Menu />
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
+            {/* <Route path="/login" element={<LoginPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/rss" element={<RssPage />} />
             <Route path="/admin" element={<SideMenu />}>
               <Route path="top100" element ={<AdminPageTop100 />}/>
               <Route path="users" element ={<UserManagerPage />}/>
-            </Route>
+            </Route> */}
             // Ajoutez d'autres routes si nécessaire
 
               {/* Définissez d'autres routes selon vos besoins */}
           </Routes>
         </div>
       </Router>
-    </AuthProvider>
   );
 };
 
