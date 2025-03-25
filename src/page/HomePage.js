@@ -19,7 +19,7 @@ const HomePage = () => {
   // }, []);
 
   return (
-    <div className="flex flex-col items-center justify-around min-h-screen bg-gradient-to-br from-gray-800 to-gray-900">
+    <div className="flex flex-col items-center justify-around min-h-screen bg-gradient-to-br from-gray-800 to-gray-900 max-h-100vh">
 
       {/* Conteneur du Titre */}
       <div className="mb-10 px-8 py-4 rounded-lg bg-gray-700 shadow-xl">
