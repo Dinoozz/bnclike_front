@@ -41,7 +41,7 @@ const ButtonUp = () => {
         onTouchStart={handleUpMouseDown}
         disabled={isUpDisabled}
         className={`relative flex items-center justify-center w-20 h-20 bg-white rounded-full shadow-xl 
-          ${isUpDisabled ? 'opacity-20 cursor-not-allowed' : 'hover:bg-blue-100 active:bg-blue-200'}
+          ${isUpDisabled ? 'opacity-20 cursor-not-allowed' : ' active:bg-blue-200'}
           transition-all duration-200`}
       >
         <FaArrowUp className="text-4xl text-blue-500" />

@@ -68,7 +68,7 @@ const ButtonDown = () => {
         onMouseDown={handleDownMouseDown}
         onTouchStart={handleDownMouseDown}
         className="relative flex items-center justify-center w-20 h-20 bg-white rounded-full shadow-xl 
-          hover:bg-red-100 active:bg-red-200 transition-all duration-200"
+          active:bg-red-200 transition-all duration-200"
       >
         <FaArrowDown className="text-4xl text-red-500" />
       </button>
