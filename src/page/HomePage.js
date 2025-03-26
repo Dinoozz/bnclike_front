@@ -19,11 +19,11 @@ const HomePage = () => {
   // }, []);
 
   return (
-    <div className="flex flex-col items-center justify-around min-h-screen bg-gradient-to-br from-gray-800 to-gray-900 max-h-100vh">
+    <div className="flex flex-col items-center justify-around min-h-screen bg-gradient-to-br from-gray-800 to-gray-900 max-h-100vh select-none">
 
       {/* Conteneur du Titre */}
       <div className="mb-10 px-8 py-4 rounded-lg bg-gray-700 shadow-xl">
-        <h1 className="text-4xl font-bold text-white text-center tracking-wider">🚪 Garage Remote</h1>
+        <h1 className="text-4xl font-bold text-white text-center tracking-wider select-none">🚪 Garage Remote</h1>
       </div>
 
       {/* Conteneur des Boutons */}

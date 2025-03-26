@@ -58,9 +58,9 @@ const ButtonDown = () => {
   }, []);
 
   return (
-    <div className="relative flex items-center justify-center">
+    <div className="relative flex items-center justify-center select-none">
       {isAnimatingDown && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
           <div className="w-32 h-20 rounded-full border-4 border-red-500 animate-ping"></div>
         </div>
       )}
@@ -68,9 +68,9 @@ const ButtonDown = () => {
         onMouseDown={handleDownMouseDown}
         onTouchStart={handleDownMouseDown}
         className="relative flex items-center justify-center w-20 h-20 bg-white rounded-full shadow-xl 
-          active:bg-red-200 transition-all duration-200"
+          active:bg-red-200 transition-all duration-200 select-none"
       >
-        <FaArrowDown className="text-4xl text-red-500" />
+        <FaArrowDown className="text-4xl text-red-500 select-none" />
       </button>
     </div>
   );
