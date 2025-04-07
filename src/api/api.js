@@ -26,10 +26,10 @@ const sendRequest = async (method, endpoint, data = {}) => {
 
 const api = {
     async up() {
-        return sendRequest('post', '/open');
+        return sendRequest('get', '/status'); // open post
     },
     async down() {
-        return sendRequest('post', '/close');
+        return sendRequest('get', '/status'); // close post
     },
     async status() {
         return sendRequest('get', '/status');
