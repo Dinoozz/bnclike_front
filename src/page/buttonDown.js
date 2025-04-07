@@ -25,13 +25,14 @@ const ButtonDown = () => {
     while (isPressedDownRef.current || isRequesting) {
       if (isRequesting) return;
 
+      // Déclenche la vibration si disponible
+      if (vibratorRef.current) {
+        vibratorRef.current.vibrate([100]); // Ex : double vibration
+      }
+
       setIsRequesting(true);
       const startTime = Date.now();
 
-      // Déclenche la vibration si disponible
-      if (vibratorRef.current) {
-        vibratorRef.current.vibrate([400]); // Ex : double vibration
-      }
 
       try {
         const response = await api.down();

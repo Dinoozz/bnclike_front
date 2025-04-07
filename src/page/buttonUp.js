@@ -14,14 +14,15 @@ const ButtonUp = () => {
   const handleUpMouseDown = async () => {
     if (isUpDisabled || isAnimatingUp || isPressedUp) return;
 
-    setIsPressedUp(true);
-    setIsAnimatingUp(true);
-    setIsUpDisabled(true);
-
     // Déclenche la vibration si disponible
     if (vibratorRef.current) {
       vibratorRef.current.vibrate([400]); // Ex : double vibration
     }
+    
+    setIsPressedUp(true);
+    setIsAnimatingUp(true);
+    setIsUpDisabled(true);
+
 
     try {
       const response = await api.up();
