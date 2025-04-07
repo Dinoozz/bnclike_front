@@ -11,22 +11,6 @@ const ButtonDown = () => {
   const [isRequesting, setIsRequesting] = useState(false);
 
   const vibratorRef = useRef(null);
-  const triggerVibration = (pattern = [400]) => {
-    if (vibratorRef.current?.isReady()) {
-      vibratorRef.current.vibrate(pattern);
-    } else {
-      // On attend que ce soit prêt et on retente
-      const interval = setInterval(() => {
-        if (vibratorRef.current?.isReady()) {
-          vibratorRef.current.vibrate(pattern);
-          clearInterval(interval);
-        }
-      }, 50);
-  
-      // Sécurité : on annule après 1 seconde max
-      setTimeout(() => clearInterval(interval), 1000);
-    }
-  };
   
 
   const handleDownMouseDown = async () => {
@@ -42,7 +26,18 @@ const ButtonDown = () => {
       if (isRequesting) return;
 
       // Déclenche la vibration si disponible
-      triggerVibration([30]);
+      if (vibratorRef.current) {
+        vibratorRef.current.vibrate([30]);
+      } else {
+        // Petite temporisation pour laisser le temps à React de monter le composant
+        setTimeout(() => {
+          if (vibratorRef.current) {
+            vibratorRef.current.vibrate([30]);
+          } else {
+            console.warn('Vibrator component non disponible même après délai.');
+          }
+        }, 50); // 50ms suffit souvent
+      }
       
 
       setIsRequesting(true);
