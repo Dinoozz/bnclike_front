@@ -1,7 +1,14 @@
 // Vibrator.js
-import React, { useImperativeHandle, forwardRef } from 'react';
+import React, { useEffect, useImperativeHandle, forwardRef } from 'react';
 
 const Vibrator = forwardRef((props, ref) => {
+  // Initialisation de l'API de vibration au montage du composant
+  useEffect(() => {
+    if (navigator.vibrate) {
+      navigator.vibrate(1); // Mini vibration pour activer l'API
+    }
+  }, []);
+
   const vibrate = (pattern = [200]) => {
     if (navigator.vibrate) {
       navigator.vibrate(pattern);
@@ -14,7 +21,7 @@ const Vibrator = forwardRef((props, ref) => {
     vibrate,
   }));
 
-  return null; // Ce composant n'affiche rien
+  return null;
 });
 
 export default Vibrator;

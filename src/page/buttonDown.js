@@ -11,10 +11,6 @@ const ButtonDown = () => {
   const [isRequesting, setIsRequesting] = useState(false);
 
   const vibratorRef = useRef(null);
-  // Déclenche la vibration si disponible
-  if (vibratorRef.current) {
-    vibratorRef.current.vibrate([0]); // Ex : double vibration
-  }
   
 
   const handleDownMouseDown = async () => {
