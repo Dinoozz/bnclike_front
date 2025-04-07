@@ -27,8 +27,18 @@ const ButtonDown = () => {
 
       // Déclenche la vibration si disponible
       if (vibratorRef.current) {
-        vibratorRef.current.vibrate([30]); // Ex : double vibration
+        vibratorRef.current.vibrate([30]);
+      } else {
+        // Petite temporisation pour laisser le temps à React de monter le composant
+        setTimeout(() => {
+          if (vibratorRef.current) {
+            vibratorRef.current.vibrate([30]);
+          } else {
+            console.warn('Vibrator component non disponible même après délai.');
+          }
+        }, 50); // 50ms suffit souvent
       }
+      
 
       setIsRequesting(true);
       const startTime = Date.now();

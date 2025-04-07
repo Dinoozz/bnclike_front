@@ -16,8 +16,18 @@ const ButtonUp = () => {
 
     // Déclenche la vibration si disponible
     if (vibratorRef.current) {
-      vibratorRef.current.vibrate([400]); // Ex : double vibration
+      vibratorRef.current.vibrate([400]);
+    } else {
+      // Petite temporisation pour laisser le temps à React de monter le composant
+      setTimeout(() => {
+        if (vibratorRef.current) {
+          vibratorRef.current.vibrate([400]);
+        } else {
+          console.warn('Vibrator component non disponible même après délai.');
+        }
+      }, 50); // 50ms suffit souvent
     }
+    
     
     setIsPressedUp(true);
     setIsAnimatingUp(true);
