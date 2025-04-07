@@ -20,7 +20,7 @@ const ButtonUp = () => {
 
     // Déclenche la vibration si disponible
     if (vibratorRef.current) {
-      vibratorRef.current.vibrate([100, 50, 100]); // Ex : double vibration
+      vibratorRef.current.vibrate([400]); // Ex : double vibration
     }
 
     try {
