@@ -27,7 +27,7 @@ const ButtonDown = () => {
 
       // Déclenche la vibration si disponible
       if (vibratorRef.current) {
-        vibratorRef.current.vibrate([100]); // Ex : double vibration
+        vibratorRef.current.vibrate([30]); // Ex : double vibration
       }
 
       setIsRequesting(true);
