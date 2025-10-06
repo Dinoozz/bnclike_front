@@ -13,7 +13,7 @@ const HomePage = () => {
     local_Ip: 'http://192.168.1.113:5000',
   };
 
-  const [activeUrl, setActiveUrl] = useState(apiUrls.rasp);
+  const [activeUrl, setActiveUrl] = useState(apiUrls.local_Ip);
 
   // const handleGlobalMouseUp = () => {
   //   window.dispatchEvent(new Event('mouseup'));
