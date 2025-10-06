@@ -31,7 +31,7 @@ const HomePage = () => {
 
   // Optionally, set a default activeUrl after mount
   useEffect(() => {
-    setActiveUrl(apiUrls.rasp);
+    setActiveUrl(apiUrls.local_Ip);
   }, []);
 
   if (!activeUrl) return null;
