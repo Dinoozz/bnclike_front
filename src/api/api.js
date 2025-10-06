@@ -4,9 +4,9 @@ import axios from 'axios';
 const API_BASE_URL = 'http://rasp:5000';  // Remplacez par l'adresse IP ou URL correcte
 
 // Fonction générique pour envoyer des requêtes API
-const sendRequest = async (method, endpoint, data = {}) => {
+const sendRequest = async (apiUrl, method, endpoint, data = {}) => {
     try {
-        const url = `${API_BASE_URL}${endpoint}`;
+        const url = `${apiUrl}${endpoint}`;
         const response = await axios({
             method,
             url,
@@ -25,14 +25,14 @@ const sendRequest = async (method, endpoint, data = {}) => {
 };
 
 const api = {
-    async up() {
-        return sendRequest('post', '/open'); // open post
+    async up(apiUrl) {
+        return sendRequest(apiUrl, 'post', '/open'); // open post
     },
-    async down() {
-        return sendRequest('post', '/close'); // close post
+    async down(apiUrl) {
+        return sendRequest(apiUrl, 'post', '/close'); // close post
     },
-    async status() {
-        return sendRequest('get', '/status');
+    async status(apiUrl) {
+        return sendRequest(apiUrl, 'get', '/status');
     }
 };
 

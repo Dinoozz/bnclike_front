@@ -5,7 +5,7 @@ import api from '../api/api';
 import Vibrator from './vibrator'; // Chemin à adapter si nécessaire
 
 
-const ButtonDown = () => {
+const ButtonDown = ({ activeUrl }) => {
   const isPressedDownRef = useRef(false);
   const [isAnimatingDown, setIsAnimatingDown] = useState(false);
   const [isRequesting, setIsRequesting] = useState(false);
@@ -45,7 +45,7 @@ const ButtonDown = () => {
 
 
       try {
-        const response = await api.down();
+        const response = await api.down(activeUrl);
         console.log('API DOWN response:', response);
       } catch (error) {
         console.error('Error with API DOWN request:', error);

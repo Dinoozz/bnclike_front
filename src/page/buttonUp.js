@@ -4,7 +4,7 @@ import { FaArrowUp } from 'react-icons/fa';
 import api from '../api/api';
 import Vibrator from './vibrator'; // Chemin à adapter si nécessaire
 
-const ButtonUp = () => {
+const ButtonUp = ({ activeUrl }) => {
   const [isPressedUp, setIsPressedUp] = useState(false);
   const [isAnimatingUp, setIsAnimatingUp] = useState(false);
   const [isUpDisabled, setIsUpDisabled] = useState(false);
@@ -35,7 +35,7 @@ const ButtonUp = () => {
 
 
     try {
-      const response = await api.up();
+      const response = await api.up(activeUrl);
       console.log('API UP response:', response);
     } catch (error) {
       console.error('Error with API UP request:', error);
