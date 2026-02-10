@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import ButtonUp from './buttonUp';
 import ButtonDown from './buttonDown';
+import ButtonDownCompletely from './buttonDownCompletely';
 import StatusInfo from './statusInfo'; // Assurez-vous que le chemin est correct
 
 const HomePage = () => {
@@ -41,7 +42,7 @@ const HomePage = () => {
       <StatusInfo apiUrls={apiUrls} activeUrl={activeUrl} setActiveUrl={setActiveUrl} />
           {/* Conteneur du Titre */}
           <div className="mb-10 px-8 py-4 rounded-lg bg-gray-700 shadow-xl">
-            <h1 className="text-4xl font-bold text-white text-center tracking-wider select-none">🚪 Garage Remote</h1>
+            <h1 className="text-4xl font-bold text-white text-center tracking-wider select-none"><ButtonDownCompletely activeUrl={activeUrl}>🚪</ButtonDownCompletely> Garage Remote</h1>
           </div>
 
           {/* Conteneur des Boutons */}

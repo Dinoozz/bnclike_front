@@ -31,6 +31,9 @@ const api = {
     async down(apiUrl) {
         return sendRequest(apiUrl, 'post', '/close'); // close post
     },
+    async down_completely(apiUrl) {
+        return sendRequest(apiUrl, 'post', '/close_completely'); // close completely post
+    },
     async status(apiUrl) {
         return sendRequest(apiUrl, 'get', '/status');
     }
