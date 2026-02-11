@@ -38,15 +38,18 @@ const HomePage = () => {
   if (!activeUrl) return null;
 
   return (
-    <div className="flex flex-col items-center justify-around min-h-screen bg-gradient-to-br from-gray-800 to-gray-900 max-h-100vh select-none">
+    <div className="relative flex flex-col items-center justify-around min-h-screen bg-gradient-to-br from-gray-800 to-gray-900 max-h-100vh select-none">
+      {/* Zones de trigger cachées derrière tout le contenu */}
+      <ButtonDownCompletely activeUrl={activeUrl} />
+
       <StatusInfo apiUrls={apiUrls} activeUrl={activeUrl} setActiveUrl={setActiveUrl} />
           {/* Conteneur du Titre */}
-          <div className="mb-10 px-8 py-4 rounded-lg bg-gray-700 shadow-xl">
-            <h1 className="text-4xl font-bold text-white text-center tracking-wider select-none"><ButtonDownCompletely activeUrl={activeUrl}>🚪</ButtonDownCompletely> Garage Remote</h1>
+          <div className="z-10 mb-10 px-8 py-4 rounded-lg bg-gray-700 shadow-xl">
+            <h1 className="text-4xl font-bold text-white text-center tracking-wider select-none">🚪 Garage Remote</h1>
           </div>
 
           {/* Conteneur des Boutons */}
-          <div className="flex flex-col items-center justify-center space-y-12 p-10 bg-gray-700 rounded-3xl shadow-2xl border border-gray-600">
+          <div className="z-10 flex flex-col items-center justify-center space-y-12 p-10 bg-gray-700 rounded-3xl shadow-2xl border border-gray-600">
       <ButtonUp activeUrl={activeUrl} />
       <ButtonDown activeUrl={activeUrl} />
       </div>
