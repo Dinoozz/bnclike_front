@@ -4,6 +4,9 @@ services:
       context: .
       dockerfile: Dockerfile
     network_mode: "host"
+    ports:
+      - "80:3000"
+      - "443:3000"
     environment:
       NODE_ENV: production
       HOSTNAME: 0.0.0.0
