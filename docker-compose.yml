@@ -1,31 +1,13 @@
-version: '3.8'
-
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "80:3000"
-      - "443:3000"
+    network_mode: "host"
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: 3000
+      PYTHON_API_URL: ${PYTHON_API_URL:-http://127.0.0.1:5000}
+      PYTHON_API_KEY: ${PYTHON_API_KEY:-test}
     restart: always
-    # networks:
-    #   - my_network
-
-#   nginx:
-#     image: nginx:latest
-#     ports:
-#       - "80:80"
-#       - "443:443"
-#       - "8081:8081"
-#     volumes:
-#       - ./nginx:/etc/nginx/conf.d
-#       - /etc/letsencrypt:/etc/letsencrypt:ro
-#     depends_on:
-#       - app
-#     networks:
-#       - my_network
-
-# networks:
-#   my_network:
-  # Ajoutez d'autres services ici si nécessaire (comme une base de données, etc.)
