@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:3000"
+      - "443:3000"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
