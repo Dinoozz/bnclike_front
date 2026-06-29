@@ -20,7 +20,7 @@ Next.js ecoute sur `http://localhost:3000`. Le navigateur appelle seulement les 
 
 ## Variables Serveur
 
-- `PYTHON_API_URL` : URL de l'API Python vue depuis le serveur Next. Par defaut : `http://127.0.0.1:5000`.
+- `PYTHON_API_URL` : URL de l'API Python vue depuis le serveur Next. En Docker, utiliser `http://host.docker.internal:5000`. Hors Docker, `http://127.0.0.1:5000` fonctionne si l'API tourne sur la meme machine.
 - `PYTHON_API_KEY` : valeur envoyee dans le header `x-api-key`. Par defaut : `test`.
 
 Ces variables ne doivent pas utiliser le prefixe `NEXT_PUBLIC_`, afin de rester cote serveur.
@@ -31,4 +31,4 @@ Ces variables ne doivent pas utiliser le prefixe `NEXT_PUBLIC_`, afin de rester 
 docker compose up -d --build
 ```
 
-Le service utilise `network_mode: "host"` pour que `http://127.0.0.1:5000` corresponde a l'hote Linux/VPS ou tourne l'API Python.
+Le service publie Next.js sur le port `80`, donc l'application est accessible sans `:3000`. Depuis le conteneur, `host.docker.internal` pointe vers l'hote Linux/VPS ou tourne l'API Python.
